@@ -8,12 +8,9 @@ cache:
   directories:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
-jobs:
-  include:
-  - stage: compile
-    script: "./gradle check"
-  - stage: run
-    script: "./gradle run"
+script:
+  - ./gradle check
+  - ./gradle run
 dist: trusty
 sudo: false
 addons:
