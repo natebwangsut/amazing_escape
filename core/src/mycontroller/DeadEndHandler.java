@@ -8,12 +8,13 @@ import utilities.Coordinate;
 
 import java.util.Map;
 
-public class DeadEndHandler {
+public class DeadEndHandler implements ActionHandler {
 
     public DeadEndHandler() {
         // TODO stub
     }
 
+    @Override
     public Action getAction(Map<Coordinate, MapTile> view){
         int size = FOVUtils.getDeadEndSize(view);
         return getActionBasedOnSize(view, size);

@@ -79,4 +79,8 @@ public class FOVUtils {
             return null;
         }
     }
+
+    public static boolean checkAhead(){
+        // TODO
+    }
 }

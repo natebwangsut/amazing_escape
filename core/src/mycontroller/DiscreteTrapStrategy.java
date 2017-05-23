@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by Kolatat on 23/5/17.
  */
-public class DiscreteTrapStrategy {
+public class DiscreteTrapStrategy implements ActionHandler {
     public Action getAction(Map<Coordinate, MapTile> view){
         TrapTile closest = FOVUtils.getClosest(view, TrapTile.class);
         assert(closest!=null);
