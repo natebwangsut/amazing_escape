@@ -6,11 +6,11 @@ package world;
  *
  */
 public class WorldSpatial {
-	
+
 	public enum Direction { EAST, WEST, SOUTH, NORTH}
-	
+
 	public static enum RelativeDirection { LEFT, RIGHT };
-	
+
 	public final static int EAST_DEGREE_MIN = 0;
 	public final static int EAST_DEGREE_MAX = 360;
 	public final static int NORTH_DEGREE = 90;
