@@ -14,3 +14,12 @@ jobs:
       script: ./gradle check
     - stage: run
       script: ./gradle run
+dist: trusty
+sudo: false
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
+notifications:
+  email: false
+  slack: true
