@@ -9,5 +9,5 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 script:
-  - ./gradle check
-  - ./gradle run
+  - gradle check
+  - gradle run
