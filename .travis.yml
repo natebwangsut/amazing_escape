@@ -9,8 +9,8 @@ cache:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
 script:
-  - ./gradle check
-  - ./gradle run
+  - ./gradlew check
+  - ./gradlew run
 dist: trusty
 sudo: false
 addons:
