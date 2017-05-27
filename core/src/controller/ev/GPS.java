@@ -1,4 +1,4 @@
-package mycontroller;
+package controller.ev;
 
 /*
  * Nate Bhurinat W. (@natebwangsut | nate.bwangsut@gmail.com)

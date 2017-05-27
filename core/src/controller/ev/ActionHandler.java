@@ -1,4 +1,4 @@
-package mycontroller;
+package controller.ev;
 
 import tiles.MapTile;
 import utilities.Coordinate;

@@ -1,4 +1,4 @@
-package mycontroller;
+package controller.ev;
 
 import world.WorldSpatial;
 
@@ -9,6 +9,11 @@ public class FollowWallAction extends Action {
     boolean followingWall = false;
 
     private static final int CAR_SPEED = 3;
+
+    @Override
+    public boolean isCompleted() {
+        return false;
+    }
 
     @Override
     public void update(float delta) {
@@ -46,7 +51,7 @@ public class FollowWallAction extends Action {
             }
             else if(turningLeft){
                 // Apply the left turn if you are not currently near a wall.
-                if(!FOVUtils.checkFollowingWall(controller.getOrientation(),currentView)){
+                if(!FOVUtils.checkFollowingWall(controller.getOrientation(), currentView)){
                     applyLeftTurn(controller.getOrientation(),delta);
                 }
                 else{
@@ -54,13 +59,13 @@ public class FollowWallAction extends Action {
                 }
             }
             // Try to determine whether or not the car is next to a wall.
-            else if(FOVUtils.checkFollowingWall(controller.getOrientation(),currentView)){
+            else if(FOVUtils.checkFollowingWall(controller.getOrientation(), currentView)){
                 // Maintain some velocity
                 if(controller.getVelocity() < CAR_SPEED){
                     controller.applyForwardAcceleration();
                 }
                 // If there is wall ahead, turn right!
-                if(FOVUtils.checkAhead(controller.getOrientation(),currentView)){
+                if(FOVUtils.checkAhead(controller.getOrientation(), currentView)){
                     lastTurnDirection = WorldSpatial.RelativeDirection.RIGHT;
                     turningRight = true;
 

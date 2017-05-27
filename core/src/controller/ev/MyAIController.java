@@ -1,6 +1,7 @@
-package mycontroller;
+package controller.ev;
 
 import controller.CarController;
+import tiles.TrapTile;
 import world.Car;
 
 public class MyAIController extends CarController{

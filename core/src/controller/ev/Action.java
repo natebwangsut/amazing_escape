@@ -1,4 +1,4 @@
-package mycontroller;
+package controller.ev;
 
 import controller.CarController;
 import world.WorldSpatial;
@@ -7,11 +7,12 @@ import world.WorldSpatial;
  * Created by Kolatat on 23/5/17.
  */
 public abstract class Action {
+
     public abstract boolean isCompleted();
     public void update(float delta){
         checkStateChange();
     }
-    protected final CarController controller;
+    protected final CarController controller = null;
 
     WorldSpatial.RelativeDirection lastTurnDirection = null;
     boolean turningLeft = false;
@@ -108,14 +109,14 @@ public abstract class Action {
      * @param lastTurnDirection
      * @param delta
      */
-    private void readjust(WorldSpatial.RelativeDirection lastTurnDirection, float delta) {
+    void readjust(WorldSpatial.RelativeDirection lastTurnDirection, float delta) {
         if(lastTurnDirection != null){
-            if(!isTurningRight && lastTurnDirection.equals(WorldSpatial.RelativeDirection.RIGHT)){
-                adjustRight(getOrientation(),delta);
-            }
-            else if(!isTurningLeft && lastTurnDirection.equals(WorldSpatial.RelativeDirection.LEFT)){
-                adjustLeft(getOrientation(),delta);
-            }
+//            if(!isTurningRight && lastTurnDirection.equals(WorldSpatial.RelativeDirection.RIGHT)){
+//                adjustRight(getOrientation(),delta);
+//            }
+//            else if(!isTurningLeft && lastTurnDirection.equals(WorldSpatial.RelativeDirection.LEFT)){
+//                adjustLeft(getOrientation(),delta);
+//            }
         }
 
     }
@@ -180,6 +181,5 @@ public abstract class Action {
             default:
                 break;
         }
-
     }
 }

@@ -1,4 +1,6 @@
-package mycontroller;/*
+package controller.ev;
+
+/*
  * Nate Bhurinat W. (@natebwangsut | nate.bwangsut@gmail.com)
  * https://github.com/natebwangsut
  */
@@ -20,7 +22,7 @@ public class DeadEndHandler implements ActionHandler {
         return getActionBasedOnSize(view, size);
     }
 
-    private Action getActionBasedOnSize(Map<Coordinate, MapTile> view, int size){
+    private Action getActionBasedOnSize(Map<Coordinate, MapTile> view, int size) {
         if(size>=3){
             // u-turn
         } else if(size==2){
@@ -30,6 +32,7 @@ public class DeadEndHandler implements ActionHandler {
         } else {
             // fuck you
         }
+        return null;
     }
 
     public void uTurn() {

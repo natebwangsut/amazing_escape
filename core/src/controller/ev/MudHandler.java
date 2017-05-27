@@ -1,4 +1,4 @@
-package mycontroller;
+package controller.ev;
 
 /**
  * Created by Kolatat on 23/5/17.

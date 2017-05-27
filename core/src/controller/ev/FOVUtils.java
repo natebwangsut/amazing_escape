@@ -1,4 +1,4 @@
-package mycontroller;
+package controller.ev;
 
 import tiles.MapTile;
 import utilities.Coordinate;
@@ -29,7 +29,7 @@ public class FOVUtils {
         private final T tile;
 
         private MapEntry(Coordinate coord, T tile) {
-            this.coord = cood;
+            this.coord = coord;
             this.tile = tile;
         }
 
@@ -74,7 +74,8 @@ public class FOVUtils {
                 // finds the closest one to center
                 .min(Comparator.comparingDouble(e -> dist2(center, e.getKey())));
         if (candidate.isPresent()) {
-            return new MapEntry<>(candidate.get().getKey(), candidate.get().getValue());
+//            return new MapEntry<T>(candidate.get().getKey(), candidate.get().getValue());
+            return null;
         } else {
             return null;
         }
@@ -82,5 +83,6 @@ public class FOVUtils {
 
     public static boolean checkAhead(){
         // TODO
+        return false;
     }
 }
