@@ -1,6 +1,8 @@
 # Project 2: amazing escape
 
-Part C: amazing_escape
+SWEN30006: Part C
+
+# Importing (IntelliJ)
 
 ## Setup Instruction
 
