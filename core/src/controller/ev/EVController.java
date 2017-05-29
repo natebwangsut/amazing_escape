@@ -4,16 +4,16 @@ import controller.CarController;
 import tiles.TrapTile;
 import world.Car;
 
-public class MyAIController extends CarController{
+public class EVController extends CarController {
 
-    public MyAIController(Car car) {
+    public EVController(Car car) {
         super(car);
     }
 
     Action state = null;
     Action backgroundState = new FollowWallAction();
-    ActionHandler deh = new DeadEndHandler();
-    ActionHandler th = new DiscreteTrapStrategy();
+    IActionHandler deh = new DeadEndHandler();
+    IActionHandler th = new DiscreteTrapStrategy();
 
     @Override
     public void update(float delta) {

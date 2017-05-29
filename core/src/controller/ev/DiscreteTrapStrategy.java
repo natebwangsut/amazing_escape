@@ -1,5 +1,6 @@
 package controller.ev;
 
+import controller.ev.handler.TrapHandler;
 import tiles.*;
 import utilities.Coordinate;
 
@@ -8,7 +9,7 @@ import java.util.Map;
 /**
  * Created by Kolatat on 23/5/17.
  */
-public class DiscreteTrapStrategy implements ActionHandler {
+public class DiscreteTrapStrategy implements IActionHandler {
 
     public Action getAction(Map<Coordinate, MapTile> view){
 //        TrapTile closest = FOVUtils.getClosest(view, TrapTile.class);

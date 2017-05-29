@@ -1,5 +1,6 @@
-package controller.ev;
+package controller.ev.handler;
 
+import controller.ev.Action;
 import tiles.MapTile;
 import utilities.Coordinate;
 
@@ -8,11 +9,10 @@ import java.util.Map;
 /**
  * Created by Kolatat on 23/5/17.
  */
-public class LavaHandler extends TrapHandler {
+public class GrassHandler extends TrapHandler {
 
     @Override
     public Action getAction(Map<Coordinate, MapTile> view) {
-        //TODO
         return null;
     }
 }
