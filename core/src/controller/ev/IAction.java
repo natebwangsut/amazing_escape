@@ -3,5 +3,7 @@ package controller.ev;/*
  * https://github.com/natebwangsut
  */
 
-public class IAction {
+public interface IAction {
+    boolean isCompleted();
+    void update(float delta);
 }

@@ -6,9 +6,8 @@ import world.WorldSpatial;
 /**
  * Created by Kolatat on 23/5/17.
  */
-public abstract class Action {
+public abstract class Action implements IAction {
 
-    public abstract boolean isCompleted();
     public void update(float delta){
         checkStateChange();
     }
