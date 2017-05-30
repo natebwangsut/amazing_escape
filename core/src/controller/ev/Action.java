@@ -8,8 +8,19 @@ import world.WorldSpatial;
  */
 public abstract class Action implements IAction {
 
+    protected final FOVUtils utils;
+
+    protected Action(CarController controller){
+        this.controller=controller;
+        if(controller instanceof EVController){
+            utils = ((EVController) controller).utils;
+        } else {
+            utils = new FOVUtils(controller);
+        }
+    }
+
     // Car Speed to move at
-    private final float CAR_SPEED = 3;
+    public static final float CAR_SPEED = 3;
 
     // Offset used to differentiate between 0 and 360 degrees
     private int EAST_THRESHOLD = 3;
@@ -17,7 +28,7 @@ public abstract class Action implements IAction {
     public void update(float delta){
         checkStateChange();
     }
-    protected final CarController controller = null;
+    protected final CarController controller;
 
     WorldSpatial.RelativeDirection lastTurnDirection = null;
     boolean turningLeft = false;
@@ -116,12 +127,12 @@ public abstract class Action implements IAction {
      */
     void readjust(WorldSpatial.RelativeDirection lastTurnDirection, float delta) {
         if(lastTurnDirection != null){
-//            if(!isTurningRight && lastTurnDirection.equals(WorldSpatial.RelativeDirection.RIGHT)){
-//                adjustRight(getOrientation(),delta);
-//            }
-//            else if(!isTurningLeft && lastTurnDirection.equals(WorldSpatial.RelativeDirection.LEFT)){
-//                adjustLeft(getOrientation(),delta);
-//            }
+            if(!turningRight && lastTurnDirection.equals(WorldSpatial.RelativeDirection.RIGHT)){
+                adjustRight(controller.getOrientation(),delta);
+            }
+            else if(!turningLeft && lastTurnDirection.equals(WorldSpatial.RelativeDirection.LEFT)){
+                adjustLeft(controller.getOrientation(),delta);
+            }
         }
 
     }

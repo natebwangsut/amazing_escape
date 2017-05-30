@@ -10,10 +10,18 @@ public class EVController extends CarController {
         super(car);
     }
 
+    {
+        utils = new FOVUtils(this);
+        backgroundState = new FollowWallAction(this);
+        deh = new DeadEndHandler();
+        th = new DiscreteTrapStrategy();
+    }
+
     Action state = null;
-    Action backgroundState = new FollowWallAction();
-    IActionHandler deh = new DeadEndHandler();
-    IActionHandler th = new DiscreteTrapStrategy();
+    Action backgroundState;
+    IActionHandler deh;
+    IActionHandler th;
+    FOVUtils utils;
 
     @Override
     public void update(float delta) {
