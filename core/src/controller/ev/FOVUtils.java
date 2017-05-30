@@ -2,6 +2,7 @@ package controller.ev;
 
 import tiles.MapTile;
 import utilities.Coordinate;
+import world.WorldSpatial;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.Optional;
 public class FOVUtils {
     public static boolean isDeadEnd(Map<Coordinate, MapTile> view) {
         // TODO
+        return false;
     }
 
     public static boolean isInVicinity(Map<Coordinate, MapTile> view, Class<? extends MapTile> type) {
@@ -22,6 +24,7 @@ public class FOVUtils {
 
     public static int getDeadEndSize(Map<Coordinate, MapTile> view) {
         // TODO
+        return -1;
     }
 
     public static class MapEntry<T extends MapTile> {
@@ -81,7 +84,12 @@ public class FOVUtils {
         }
     }
 
-    public static boolean checkAhead(){
+    public static boolean checkAhead(WorldSpatial.Direction dir, Map<Coordinate, MapTile> view){
+        // TODO
+        return false;
+    }
+
+    public static boolean checkFollowingWall(WorldSpatial.Direction dir, Map<Coordinate, MapTile> view){
         // TODO
         return false;
     }

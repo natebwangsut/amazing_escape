@@ -1,6 +1,10 @@
 package controller.ev;
 
+import tiles.MapTile;
+import utilities.Coordinate;
 import world.WorldSpatial;
+
+import java.util.Map;
 
 /**
  * Created by Kolatat on 23/5/17.
@@ -19,6 +23,7 @@ public class FollowWallAction extends Action {
     public void update(float delta) {
         super.update(delta);
 
+        Map<Coordinate, MapTile> currentView = controller.getView();
         // If you are not following a wall initially, find a wall to stick to!
         if(!followingWall){
             if(controller.getVelocity() < CAR_SPEED){
@@ -29,7 +34,7 @@ public class FollowWallAction extends Action {
                 lastTurnDirection = WorldSpatial.RelativeDirection.LEFT;
                 applyLeftTurn(controller.getOrientation(),delta);
             }
-            if(FOVUtils.checkAhead()){
+            if(FOVUtils.checkAhead(controller.getOrientation(), currentView)){
                 // Turn right until we go back to east!
                 if(!controller.getOrientation().equals(WorldSpatial.Direction.EAST)){
                     lastTurnDirection = WorldSpatial.RelativeDirection.RIGHT;

@@ -8,6 +8,12 @@ import world.WorldSpatial;
  */
 public abstract class Action implements IAction {
 
+    // Car Speed to move at
+    private final float CAR_SPEED = 3;
+
+    // Offset used to differentiate between 0 and 360 degrees
+    private int EAST_THRESHOLD = 3;
+
     public void update(float delta){
         checkStateChange();
     }
@@ -128,23 +134,23 @@ public abstract class Action implements IAction {
 
         switch(orientation){
             case EAST:
-                if(getAngle() > WorldSpatial.EAST_DEGREE_MIN+EAST_THRESHOLD){
-                    turnRight(delta);
+                if(controller.getAngle() > WorldSpatial.EAST_DEGREE_MIN+EAST_THRESHOLD){
+                    controller.turnRight(delta);
                 }
                 break;
             case NORTH:
-                if(getAngle() > WorldSpatial.NORTH_DEGREE){
-                    turnRight(delta);
+                if(controller.getAngle() > WorldSpatial.NORTH_DEGREE){
+                    controller.turnRight(delta);
                 }
                 break;
             case SOUTH:
-                if(getAngle() > WorldSpatial.SOUTH_DEGREE){
-                    turnRight(delta);
+                if(controller.getAngle() > WorldSpatial.SOUTH_DEGREE){
+                    controller.turnRight(delta);
                 }
                 break;
             case WEST:
-                if(getAngle() > WorldSpatial.WEST_DEGREE){
-                    turnRight(delta);
+                if(controller.getAngle() > WorldSpatial.WEST_DEGREE){
+                    controller.turnRight(delta);
                 }
                 break;
 
@@ -157,23 +163,23 @@ public abstract class Action implements IAction {
     private void adjustRight(WorldSpatial.Direction orientation, float delta) {
         switch(orientation){
             case EAST:
-                if(getAngle() > WorldSpatial.SOUTH_DEGREE && getAngle() < WorldSpatial.EAST_DEGREE_MAX){
-                    turnLeft(delta);
+                if(controller.getAngle() > WorldSpatial.SOUTH_DEGREE && controller.getAngle() < WorldSpatial.EAST_DEGREE_MAX){
+                    controller.turnLeft(delta);
                 }
                 break;
             case NORTH:
-                if(getAngle() < WorldSpatial.NORTH_DEGREE){
-                    turnLeft(delta);
+                if(controller.getAngle() < WorldSpatial.NORTH_DEGREE){
+                    controller.turnLeft(delta);
                 }
                 break;
             case SOUTH:
-                if(getAngle() < WorldSpatial.SOUTH_DEGREE){
-                    turnLeft(delta);
+                if(controller.getAngle() < WorldSpatial.SOUTH_DEGREE){
+                    controller.turnLeft(delta);
                 }
                 break;
             case WEST:
-                if(getAngle() < WorldSpatial.WEST_DEGREE){
-                    turnLeft(delta);
+                if(controller.getAngle() < WorldSpatial.WEST_DEGREE){
+                    controller.turnLeft(delta);
                 }
                 break;
 
