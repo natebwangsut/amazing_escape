@@ -10,7 +10,7 @@ import utilities.Coordinate;
 
 import java.util.Map;
 
-public class DeadEndHandler implements ActionHandler {
+public class DeadEndHandler implements IActionHandler {
 
     public DeadEndHandler() {
         // TODO stub

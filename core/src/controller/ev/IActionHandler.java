@@ -8,6 +8,6 @@ import java.util.Map;
 /**
  * Created by Kolatat on 23/5/17.
  */
-public interface ActionHandler {
+public interface IActionHandler {
     Action getAction(Map<Coordinate, MapTile> view);
 }
