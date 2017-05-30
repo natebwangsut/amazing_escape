@@ -6,17 +6,21 @@ import utilities.Coordinate;
 import world.WorldSpatial;
 
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * Created by Kolatat on 23/5/17.
  */
-public class FollowWallAction extends Action {
+public class FollowAction extends Action {
 
-    public FollowWallAction(CarController controller){
+    protected final Predicate<MapTile> tileTest;
+
+    public FollowAction(CarController controller, Predicate<MapTile> tileTest){
         super(controller);
+        this.tileTest = tileTest;
     }
 
-    boolean followingWall = false;
+    boolean following = false;
 
     @Override
     public boolean isCompleted() {
@@ -27,9 +31,8 @@ public class FollowWallAction extends Action {
     public void update(float delta) {
         super.update(delta);
 
-        Map<Coordinate, MapTile> currentView = controller.getView();
         // If you are not following a wall initially, find a wall to stick to!
-        if(!followingWall){
+        if(!following){
             if(controller.getVelocity() < CAR_SPEED){
                 controller.applyForwardAcceleration();
             }
@@ -38,14 +41,14 @@ public class FollowWallAction extends Action {
                 lastTurnDirection = WorldSpatial.RelativeDirection.LEFT;
                 applyLeftTurn(controller.getOrientation(),delta);
             }
-            if(utils.checkWall(WorldSpatial.Direction.NORTH)){
+            if(utils.check(WorldSpatial.Direction.NORTH, tileTest)){
                 // Turn right until we go back to east!
                 if(!controller.getOrientation().equals(WorldSpatial.Direction.EAST)){
                     lastTurnDirection = WorldSpatial.RelativeDirection.RIGHT;
                     applyRightTurn(controller.getOrientation(),delta);
                 }
                 else{
-                    followingWall = true;
+                    following = true;
                 }
             }
         }
@@ -60,7 +63,7 @@ public class FollowWallAction extends Action {
             }
             else if(turningLeft){
                 // Apply the left turn if you are not currently near a wall.
-                if(!utils.checkFollowingWall()){
+                if(!utils.checkFollowing(tileTest)){
                     applyLeftTurn(controller.getOrientation(),delta);
                 }
                 else{
@@ -68,13 +71,13 @@ public class FollowWallAction extends Action {
                 }
             }
             // Try to determine whether or not the car is next to a wall.
-            else if(utils.checkFollowingWall()){
+            else if(utils.checkFollowing(tileTest)){
                 // Maintain some velocity
                 if(controller.getVelocity() < CAR_SPEED){
                     controller.applyForwardAcceleration();
                 }
                 // If there is wall ahead, turn right!
-                if(utils.checkWallAhead()){
+                if(utils.checkAhead(tileTest)){
                     lastTurnDirection = WorldSpatial.RelativeDirection.RIGHT;
                     turningRight = true;
 

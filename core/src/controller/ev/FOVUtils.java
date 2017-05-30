@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * Created by Kolatat on 23/5/17.
@@ -19,10 +20,17 @@ public class FOVUtils {
         return false;
     }
 
-    public static boolean isInVicinity(Map<Coordinate, MapTile> view, Class<? extends MapTile> type) {
-        // from all the tiles in our view, check for the presence of any tile that is our type
+    public boolean isInVicinity(Predicate<MapTile> wantTile) {
+        Map<Coordinate, MapTile> view = con.getView();
+        for(int i=0; i<=wallSensitivity; i++){
+            for(int j=-wallSensitivity; j<=wallSensitivity; j++){
+                Coordinate nc = relativeAdd(i, j, con.getOrientation());
+                if(wantTile.test(view.get(nc))){
+                    return true;
+                }
+            }
+        }
         return false;
-        // return view.entrySet().stream().filter(e -> type.isInstance(e.getValue())).findAny().isPresent();
     }
 
     public static int getDeadEndSize(Map<Coordinate, MapTile> view) {
@@ -87,8 +95,8 @@ public class FOVUtils {
         }
     }
 
-    public boolean checkWallAhead(){
-        return checkWall(con.getOrientation());
+    public boolean checkAhead(Predicate<MapTile> p){
+        return check(con.getOrientation(),p);
     }
 
     public static WorldSpatial.Direction directionalAdd(WorldSpatial.Direction dir, WorldSpatial.RelativeDirection rdir){
@@ -107,13 +115,13 @@ public class FOVUtils {
         return dirs.get(i);
     }
 
-    public boolean checkFollowingWall(){
-        return checkWall(directionalAdd(con.getOrientation(), WorldSpatial.RelativeDirection.LEFT));
+    public boolean checkFollowing(Predicate<MapTile> p){
+        return check(directionalAdd(con.getOrientation(), WorldSpatial.RelativeDirection.LEFT), p);
     }
     private int wallSensitivity = 2;
-    public boolean checkWall(WorldSpatial.Direction dir){
+    public boolean check(WorldSpatial.Direction dir, Predicate<MapTile> p){
         for(int i=0; i<=wallSensitivity; i++){
-            if(con.getView().get(relativeAdd(i, 0, dir)).getName().equals("Wall")){
+            if(p.test(con.getView().get(relativeAdd(i, 0, dir)))){
                 return true;
             }
         }
