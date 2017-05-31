@@ -46,12 +46,13 @@ public class Simulation extends ApplicationAdapter implements InputProcessor {
 
         startTime = System.currentTimeMillis();
         // Define the asset manager
-        // map = new TmxMapLoader().load("easy-map.tmx");
-         map = new TmxMapLoader().load("easy-map-traps.tmx");
-        // map = new TmxMapLoader().load("lecture-preview.tmx");
-        // map = new TmxMapLoader().load("lecture-preview2.tmx");
-        // map = new TmxMapLoader().load("map.tmx");
-        // map = new TmxMapLoader().load("map2.tmx");
+        //map = new TmxMapLoader().load("easy-map.tmx");
+        map = new TmxMapLoader().load("easy-map-traps.tmx");
+        //map = new TmxMapLoader().load("lecture-preview.tmx");
+        //map = new TmxMapLoader().load("lecture-preview2.tmx");
+        //map = new TmxMapLoader().load("testRoad.tmx");
+        //map = new TmxMapLoader().load("map.tmx");
+        //map = new TmxMapLoader().load("map2.tmx");
 
         // Create the world
         world = new World(map);
@@ -71,7 +72,7 @@ public class Simulation extends ApplicationAdapter implements InputProcessor {
     }
 
     @Override
-    public void render () {
+    public void render() {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -84,7 +85,7 @@ public class Simulation extends ApplicationAdapter implements InputProcessor {
 
         world.update(Gdx.graphics.getDeltaTime());
 
-        if(CAMERA_MODE.equals(CameraMode.PLAYER)){
+        if (CAMERA_MODE.equals(CameraMode.PLAYER)) {
             followCar();
         }
 
@@ -98,7 +99,7 @@ public class Simulation extends ApplicationAdapter implements InputProcessor {
         font.draw(batch, health, World.MAP_PIXEL_SIZE, Gdx.graphics.getHeight() - offset*World.MAP_PIXEL_SIZE);
         font.setColor(Color.GREEN);
         //If we win!
-        if(gameWon){
+        if (gameWon) {
             font.getData().setScale(5f);
             String winText = "You WIN!";
             final GlyphLayout layout = new GlyphLayout(font, winText);
@@ -129,20 +130,20 @@ public class Simulation extends ApplicationAdapter implements InputProcessor {
     @Override
     public boolean keyUp(int keycode) {
         // Zoom in: 11x11 grid centered on the player
-        if(keycode == Input.Keys.X){
+        if (keycode == Input.Keys.X) {
             camera.viewportWidth = PLAYER_VIEW;
             camera.viewportHeight = PLAYER_VIEW;
             followCar();
             CAMERA_MODE = CameraMode.PLAYER;
         }
-        if(keycode == Input.Keys.Z){
+        if (keycode == Input.Keys.Z) {
 
             camera.viewportWidth = World.MAP_WIDTH;
             camera.viewportHeight = World.MAP_HEIGHT;
             camera.position.set(0,0,0);
             CAMERA_MODE = CameraMode.WORLD;
         }
-        if(keycode == Input.Keys.F){
+        if (keycode == Input.Keys.F) {
             DEBUG_MODE = true;
         }
         camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 100/camera.viewportWidth);
@@ -185,7 +186,7 @@ public class Simulation extends ApplicationAdapter implements InputProcessor {
         return false;
     }
 
-    public void followCar(){
+    public void followCar() {
 
         float carXPosition = world.getCar().getX();
         float carYPosition = world.getCar().getY();
@@ -194,7 +195,7 @@ public class Simulation extends ApplicationAdapter implements InputProcessor {
 
     }
 
-    public static void winGame(){
+    public static void winGame() {
         gameWon = true;
 
     }

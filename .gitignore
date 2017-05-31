@@ -1,3 +1,15 @@
+#
+# SWEN30006: Group 107
+# .gitignore
+#
+
+## Project Specific
+
+core/assets/log/
+desktop/assets/log/
+
+###############################################################################
+
 ## Java
 
 *.class

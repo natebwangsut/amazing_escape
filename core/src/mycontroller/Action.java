@@ -1,4 +1,4 @@
-package controller.ev;
+package mycontroller;
 
 import controller.CarController;
 import world.WorldSpatial;
@@ -8,11 +8,11 @@ import world.WorldSpatial;
  */
 public abstract class Action implements IAction {
 
-    protected final FOVUtils utils;
+    final FOVUtils utils;
 
-    protected Action(CarController controller){
+    protected Action(CarController controller) {
         this.controller=controller;
-        if(controller instanceof EVController){
+        if (controller instanceof EVController) {
             utils = ((EVController) controller).utils;
         } else {
             utils = new FOVUtils(controller);
@@ -23,9 +23,9 @@ public abstract class Action implements IAction {
     public static final float CAR_SPEED = 3;
 
     // Offset used to differentiate between 0 and 360 degrees
-    private int EAST_THRESHOLD = 3;
+    private static final int EAST_THRESHOLD = 3;
 
-    public void update(float delta){
+    public void update(float delta) {
         checkStateChange();
     }
     protected final CarController controller;
@@ -40,15 +40,15 @@ public abstract class Action implements IAction {
      *  already has.
      */
     private void checkStateChange() {
-        if(previousState == null){
+        if (previousState == null) {
             previousState = controller.getOrientation();
         }
         else{
-            if(previousState != controller.getOrientation()){
-                if(turningLeft){
+            if (previousState != controller.getOrientation()) {
+                if (turningLeft) {
                     turningLeft = false;
                 }
-                if(turningRight){
+                if (turningRight) {
                     turningRight = false;
                 }
                 previousState = controller.getOrientation();
@@ -60,24 +60,24 @@ public abstract class Action implements IAction {
      * Turn the car counter clock wise (think of a compass going counter clock-wise)
      */
     protected void applyLeftTurn(WorldSpatial.Direction orientation, float delta) {
-        switch(orientation){
+        switch(orientation) {
             case EAST:
-                if(!controller.getOrientation().equals(WorldSpatial.Direction.NORTH)){
+                if (!controller.getOrientation().equals(WorldSpatial.Direction.NORTH)) {
                     controller.turnLeft(delta);
                 }
                 break;
             case NORTH:
-                if(!controller.getOrientation().equals(WorldSpatial.Direction.WEST)){
+                if (!controller.getOrientation().equals(WorldSpatial.Direction.WEST)) {
                     controller.turnLeft(delta);
                 }
                 break;
             case SOUTH:
-                if(!controller.getOrientation().equals(WorldSpatial.Direction.EAST)){
+                if (!controller.getOrientation().equals(WorldSpatial.Direction.EAST)) {
                     controller.turnLeft(delta);
                 }
                 break;
             case WEST:
-                if(!controller.getOrientation().equals(WorldSpatial.Direction.SOUTH)){
+                if (!controller.getOrientation().equals(WorldSpatial.Direction.SOUTH)) {
                     controller.turnLeft(delta);
                 }
                 break;
@@ -92,24 +92,24 @@ public abstract class Action implements IAction {
      * Turn the car clock wise (think of a compass going clock-wise)
      */
     protected void applyRightTurn(WorldSpatial.Direction orientation, float delta) {
-        switch(orientation){
+        switch(orientation) {
             case EAST:
-                if(!controller.getOrientation().equals(WorldSpatial.Direction.SOUTH)){
+                if (!controller.getOrientation().equals(WorldSpatial.Direction.SOUTH)) {
                     controller.turnRight(delta);
                 }
                 break;
             case NORTH:
-                if(!controller.getOrientation().equals(WorldSpatial.Direction.EAST)){
+                if (!controller.getOrientation().equals(WorldSpatial.Direction.EAST)) {
                     controller.turnRight(delta);
                 }
                 break;
             case SOUTH:
-                if(!controller.getOrientation().equals(WorldSpatial.Direction.WEST)){
+                if (!controller.getOrientation().equals(WorldSpatial.Direction.WEST)) {
                     controller.turnRight(delta);
                 }
                 break;
             case WEST:
-                if(!controller.getOrientation().equals(WorldSpatial.Direction.NORTH)){
+                if (!controller.getOrientation().equals(WorldSpatial.Direction.NORTH)) {
                     controller.turnRight(delta);
                 }
                 break;
@@ -126,11 +126,11 @@ public abstract class Action implements IAction {
      * @param delta
      */
     void readjust(WorldSpatial.RelativeDirection lastTurnDirection, float delta) {
-        if(lastTurnDirection != null){
-            if(!turningRight && lastTurnDirection.equals(WorldSpatial.RelativeDirection.RIGHT)){
+        if (lastTurnDirection != null) {
+            if (!turningRight && lastTurnDirection.equals(WorldSpatial.RelativeDirection.RIGHT)) {
                 adjustRight(controller.getOrientation(),delta);
             }
-            else if(!turningLeft && lastTurnDirection.equals(WorldSpatial.RelativeDirection.LEFT)){
+            else if (!turningLeft && lastTurnDirection.equals(WorldSpatial.RelativeDirection.LEFT)) {
                 adjustLeft(controller.getOrientation(),delta);
             }
         }
@@ -143,24 +143,24 @@ public abstract class Action implements IAction {
      */
     private void adjustLeft(WorldSpatial.Direction orientation, float delta) {
 
-        switch(orientation){
+        switch(orientation) {
             case EAST:
-                if(controller.getAngle() > WorldSpatial.EAST_DEGREE_MIN+EAST_THRESHOLD){
+                if (controller.getAngle() > WorldSpatial.EAST_DEGREE_MIN+EAST_THRESHOLD) {
                     controller.turnRight(delta);
                 }
                 break;
             case NORTH:
-                if(controller.getAngle() > WorldSpatial.NORTH_DEGREE){
+                if (controller.getAngle() > WorldSpatial.NORTH_DEGREE) {
                     controller.turnRight(delta);
                 }
                 break;
             case SOUTH:
-                if(controller.getAngle() > WorldSpatial.SOUTH_DEGREE){
+                if (controller.getAngle() > WorldSpatial.SOUTH_DEGREE) {
                     controller.turnRight(delta);
                 }
                 break;
             case WEST:
-                if(controller.getAngle() > WorldSpatial.WEST_DEGREE){
+                if (controller.getAngle() > WorldSpatial.WEST_DEGREE) {
                     controller.turnRight(delta);
                 }
                 break;
@@ -172,24 +172,24 @@ public abstract class Action implements IAction {
     }
 
     private void adjustRight(WorldSpatial.Direction orientation, float delta) {
-        switch(orientation){
+        switch(orientation) {
             case EAST:
-                if(controller.getAngle() > WorldSpatial.SOUTH_DEGREE && controller.getAngle() < WorldSpatial.EAST_DEGREE_MAX){
+                if (controller.getAngle() > WorldSpatial.SOUTH_DEGREE && controller.getAngle() < WorldSpatial.EAST_DEGREE_MAX) {
                     controller.turnLeft(delta);
                 }
                 break;
             case NORTH:
-                if(controller.getAngle() < WorldSpatial.NORTH_DEGREE){
+                if (controller.getAngle() < WorldSpatial.NORTH_DEGREE) {
                     controller.turnLeft(delta);
                 }
                 break;
             case SOUTH:
-                if(controller.getAngle() < WorldSpatial.SOUTH_DEGREE){
+                if (controller.getAngle() < WorldSpatial.SOUTH_DEGREE) {
                     controller.turnLeft(delta);
                 }
                 break;
             case WEST:
-                if(controller.getAngle() < WorldSpatial.WEST_DEGREE){
+                if (controller.getAngle() < WorldSpatial.WEST_DEGREE) {
                     controller.turnLeft(delta);
                 }
                 break;

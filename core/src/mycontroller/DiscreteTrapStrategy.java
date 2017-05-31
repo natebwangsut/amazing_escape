@@ -1,7 +1,7 @@
-package controller.ev;
+package mycontroller;
 
 import controller.CarController;
-import controller.ev.handler.TrapHandler;
+import mycontroller.handler.TrapHandler;
 import tiles.*;
 import utilities.Coordinate;
 
@@ -13,11 +13,11 @@ import java.util.Map;
 public class DiscreteTrapStrategy implements IActionHandler {
 
     CarController con;
-    public DiscreteTrapStrategy(CarController con){
+    public DiscreteTrapStrategy(CarController con) {
         this.con=con;
     }
 
-    public Action getAction(Map<Coordinate, MapTile> view){
+    public Action getAction(Map<Coordinate, MapTile> view) {
         return new FollowAction(con, t->t instanceof TrapTile);
 //        TrapTile closest = FOVUtils.getClosest(view, TrapTile.class);
 //        assert(closest!=null);
@@ -28,7 +28,7 @@ public class DiscreteTrapStrategy implements IActionHandler {
 
     private TrapHandler getHandlerFor(Class<? extends TrapTile> type) {
         // TODO: Trap handler
-//        switch(type){
+//        switch(type) {
 //            case tiles.GrassTrap.class:
 //                return new GrassHandler();
 //            case tiles.LavaTrap.class:

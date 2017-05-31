@@ -1,4 +1,4 @@
-package controller.ev;
+package mycontroller;
 
 import controller.CarController;
 import tiles.MapTile;
@@ -22,10 +22,10 @@ public class FOVUtils {
 
     public boolean isInVicinity(Predicate<MapTile> wantTile) {
         Map<Coordinate, MapTile> view = con.getView();
-        for(int i=0; i<=wallSensitivity; i++){
-            for(int j=-wallSensitivity; j<=wallSensitivity; j++){
+        for(int i=0; i<=wallSensitivity; i++) {
+            for(int j=-wallSensitivity; j<=wallSensitivity; j++) {
                 Coordinate nc = relativeAdd(i, j, con.getOrientation());
-                if(wantTile.test(view.get(nc))){
+                if (wantTile.test(view.get(nc))) {
                     return true;
                 }
             }
@@ -95,18 +95,21 @@ public class FOVUtils {
         }
     }
 
-    public boolean checkAhead(Predicate<MapTile> p){
+    public boolean checkAhead(Predicate<MapTile> p) {
         return check(con.getOrientation(),p);
     }
 
-    public static WorldSpatial.Direction directionalAdd(WorldSpatial.Direction dir, WorldSpatial.RelativeDirection rdir){
+    public static WorldSpatial.Direction directionalAdd(
+            WorldSpatial.Direction dir,
+            WorldSpatial.RelativeDirection rdir)
+    {
         ArrayList<WorldSpatial.Direction> dirs = new ArrayList<>(4);
         dirs.add(WorldSpatial.Direction.NORTH);
         dirs.add(WorldSpatial.Direction.EAST);
         dirs.add(WorldSpatial.Direction.SOUTH);
         dirs.add(WorldSpatial.Direction.WEST);
         int i = dirs.indexOf(dir);
-        if(rdir == WorldSpatial.RelativeDirection.LEFT){
+        if (rdir == WorldSpatial.RelativeDirection.LEFT) {
             i--;
         } else {
             i++;
@@ -115,13 +118,13 @@ public class FOVUtils {
         return dirs.get(i);
     }
 
-    public boolean checkFollowing(Predicate<MapTile> p){
+    public boolean checkFollowing(Predicate<MapTile> p) {
         return check(directionalAdd(con.getOrientation(), WorldSpatial.RelativeDirection.LEFT), p);
     }
     private int wallSensitivity = 2;
-    public boolean check(WorldSpatial.Direction dir, Predicate<MapTile> p){
-        for(int i=0; i<=wallSensitivity; i++){
-            if(p.test(con.getView().get(relativeAdd(i, 0, dir)))){
+    public boolean check(WorldSpatial.Direction dir, Predicate<MapTile> p) {
+        for(int i=0; i<=wallSensitivity; i++) {
+            if (p.test(con.getView().get(relativeAdd(i, 0, dir)))) {
                 return true;
             }
         }
@@ -129,17 +132,17 @@ public class FOVUtils {
     }
     private final CarController con;
 
-    public FOVUtils(CarController con){
+    public FOVUtils(CarController con) {
         this.con=con;
     }
 
-    public Coordinate relativeAdd(int x, int y, WorldSpatial.Direction dir){
+    public Coordinate relativeAdd(int x, int y, WorldSpatial.Direction dir) {
         int dx = 0, dy = 0;
         switch(dir) {
             // we are east oriented (theta=0)
             /*
             R = [ dx     [ cos t, -sin t
-                  dy ] x   sin t, cos t  ]
+                  dy ] x   sin t,  cos t  ]
              */
             case EAST:
                 dx = x;
