@@ -13,13 +13,12 @@ import java.util.function.Predicate;
 public class FollowAction extends Action {
 
     protected final Predicate<Coordinate> tileTest;
+    boolean following = false;
 
     public FollowAction(CarController controller, Predicate<Coordinate> tileTest) {
         super(controller);
         this.tileTest = tileTest;
     }
-
-    boolean following = false;
 
     @Override
     public boolean isCompleted() {
@@ -38,34 +37,31 @@ public class FollowAction extends Action {
             // Turn towards the north
             if (!controller.getOrientation().equals(WorldSpatial.Direction.NORTH)) {
                 lastTurnDirection = WorldSpatial.RelativeDirection.LEFT;
-                applyLeftTurn(controller.getOrientation(),delta);
+                applyLeftTurn(controller.getOrientation(), delta);
             }
             if (utils.check(WorldSpatial.Direction.NORTH, tileTest)) {
                 // Turn right until we go back to east!
                 if (!controller.getOrientation().equals(WorldSpatial.Direction.EAST)) {
                     lastTurnDirection = WorldSpatial.RelativeDirection.RIGHT;
-                    applyRightTurn(controller.getOrientation(),delta);
-                }
-                else {
+                    applyRightTurn(controller.getOrientation(), delta);
+                } else {
                     following = true;
                 }
             }
         }
         // Once the car is already stuck to a wall, apply the following logic
-        else{
+        else {
 
             // Readjust the car if it is misaligned.
-            readjust(lastTurnDirection,delta);
+            readjust(lastTurnDirection, delta);
 
             if (turningRight) {
-                applyRightTurn(controller.getOrientation(),delta);
-            }
-            else if (turningLeft) {
+                applyRightTurn(controller.getOrientation(), delta);
+            } else if (turningLeft) {
                 // Apply the left turn if you are not currently near a wall.
                 if (!utils.checkFollowing(tileTest)) {
-                    applyLeftTurn(controller.getOrientation(),delta);
-                }
-                else {
+                    applyLeftTurn(controller.getOrientation(), delta);
+                } else {
                     turningLeft = false;
                 }
             }

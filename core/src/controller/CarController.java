@@ -16,6 +16,7 @@ public abstract class CarController {
 
     /**
      * Instantiates the car
+     *
      * @param car
      */
     public CarController(Car car) {
@@ -45,6 +46,7 @@ public abstract class CarController {
 
     /**
      * Turns the car left
+     *
      * @param delta refers to the value passed in by the update call
      */
     public void turnLeft(float delta) {
@@ -53,6 +55,7 @@ public abstract class CarController {
 
     /**
      * Turns the car right
+     *
      * @param delta refers to the value passed in by the update call
      */
     public void turnRight(float delta) {
@@ -97,10 +100,10 @@ public abstract class CarController {
      * This projection assumes that the car's velocity is constant and the delta value is
      * also constant (in reality, the delta value will vary)
      *
-     * @param velocity refers to the car's velocity
-     * @param targetDegree refers to what degree you want to be in
+     * @param velocity      refers to the car's velocity
+     * @param targetDegree  refers to what degree you want to be in
      * @param turnDirection refers to which direction you are turning
-     * @param delta refers to the delta value passed by update.
+     * @param delta         refers to the delta value passed by update.
      */
     public PeekTuple peek(Vector2 velocity, float targetDegree, WorldSpatial.RelativeDirection turnDirection, float delta) {
         return car.peek(velocity, targetDegree, turnDirection, delta);
@@ -109,7 +112,7 @@ public abstract class CarController {
     /**
      * Returns the view around your car (this is a 3x3 area)
      */
-    public HashMap<Coordinate,MapTile> getView() {
+    public HashMap<Coordinate, MapTile> getView() {
         return car.getView();
     }
 
