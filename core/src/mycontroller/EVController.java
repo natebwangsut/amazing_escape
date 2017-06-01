@@ -64,6 +64,10 @@ public class EVController extends CarController {
 
             if (utils.isDeadEnd(pv)) {
                 toDo = state = deh.getAction(getView());
+
+                DeadEndHandler mydeh = (DeadEndHandler) deh;
+                mydeh.uTurn(delta);
+                return;
             } else /*if (utils.isInVicinity(t->t instanceof TrapTile)) {
                 toDo = state = th.getAction(getView());
             } else */ {

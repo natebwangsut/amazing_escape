@@ -40,7 +40,6 @@ public class Simulation extends ApplicationAdapter implements InputProcessor {
 
     public static void winGame() {
         gameWon = true;
-
     }
 
     @Override
