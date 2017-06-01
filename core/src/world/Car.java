@@ -28,26 +28,11 @@ import world.WorldSpatial.Direction;
  * This class provides functionality for use within the simulation system. It is NOT intended to be
  * read or understood for SWEN30006 Part C. Comments have been intentionally removed to reinforce
  * this. We take no responsibility if you use all your time trying to understand this code.
- *
  */
 public class Car extends Sprite {
 
 
-    // Logger
-    private static Logger logger = LogManager.getLogger();
-
-    private Direction currentOrientation;
-
-
-    private Vector2 velocity;
-    private float angle = 0;
-    private float rotation = 0;
-    private boolean reversing = false;
-    private boolean accelerating = false;
-    private boolean handBrake = false;
-    private boolean wasReversing = false;
-
-
+    public static final int VIEW_SQUARE = 3;
     private static final float MAX_SPEED = 5f;
     private static final float MAX_REVERSE_SPEED = 2.5f;
     private static final float ROTATING_FACTOR = 150f;
@@ -59,22 +44,22 @@ public class Car extends Sprite {
     private static final float MAX_DEGREES = 360;
     private static final float FRICTION_FORCE = 0.5f;
     private static final int SNAP_THRESHOLD = 5;
-    public static final int VIEW_SQUARE = 3;
-
-
-    private static enum State {FORWARD, REVERSE}
-
-    ;
+    private static final int INITIAL_HEALTH = 100;
+    // Logger
+    private static Logger logger = LogManager.getLogger();
     private static State carDirection = State.FORWARD;
-
-
     private static int CAR_WIDTH;
     private static int CAR_HEIGHT;
-
-    private int health;
-    private static final int INITIAL_HEALTH = 100;
-
     ArrayList<Integer> startLocation;
+    private Direction currentOrientation;
+    private Vector2 velocity;
+    private float angle = 0;
+    private float rotation = 0;
+    private boolean reversing = false;
+    private boolean accelerating = false;
+    private boolean handBrake = false;
+    private boolean wasReversing = false;
+    private int health;
 
     public Car(Sprite sprite) {
         super(sprite);
@@ -101,7 +86,6 @@ public class Car extends Sprite {
         this.currentOrientation = WorldSpatial.Direction.EAST;
 
     }
-
 
     public void update(float delta) {
         if (Simulation.DEBUG_MODE) {
@@ -187,7 +171,6 @@ public class Car extends Sprite {
     public void brake() {
         handBrake = true;
     }
-
 
     /**
      * Snap to an orientation if you get close to it!
@@ -277,7 +260,6 @@ public class Car extends Sprite {
         }
 
     }
-
 
     public void turnRight(float delta) {
         angle -= ROTATING_FACTOR * delta;
@@ -434,7 +416,6 @@ public class Car extends Sprite {
         return startLocation;
     }
 
-
     public void checkTrap(MapTile currentTile, float delta) {
 
         if (currentTile.getName().equals("Trap")) {
@@ -446,12 +427,6 @@ public class Car extends Sprite {
     public void setVelocity(float x, float y) { /* Better if this wasn't public but needed in traps */
         velocity.x = x;
         velocity.y = y;
-    }
-
-
-    public void setVelocity(Vector2 scl) {
-        this.velocity = scl;
-
     }
 
     public float normalizeAngle(float angle) {
@@ -471,10 +446,14 @@ public class Car extends Sprite {
         return velocity.len();
     }
 
+    public void setVelocity(Vector2 scl) {
+        this.velocity = scl;
+
+    }
+
     public Vector2 getRawVelocity() {
         return velocity;
     }
-
 
     // Given a velocity and the degree I want to end up on,
     // where will I be? Note: This method is a composition of other methods used above, would be best
@@ -503,7 +482,7 @@ public class Car extends Sprite {
         timeDifference = (Math.abs(normalizedRotation - normalizedDegree) / (ROTATING_FACTOR * delta));
 
 
-        for (int i = 0; i < (int) Math.round(timeDifference); i++) {
+        for (int i = 0; i < Math.round(timeDifference); i++) {
             if ((currentRotation < degree && turnDirection.equals(WorldSpatial.RelativeDirection.LEFT) || (currentRotation > degree && turnDirection.equals(WorldSpatial.RelativeDirection.RIGHT)))) {
                 // Calculate Right turns
                 if (turnDirection.equals(WorldSpatial.RelativeDirection.RIGHT)) {
@@ -644,4 +623,6 @@ public class Car extends Sprite {
     public WorldSpatial.Direction getOrientation() {
         return this.currentOrientation;
     }
+
+    private enum State {FORWARD, REVERSE}
 }

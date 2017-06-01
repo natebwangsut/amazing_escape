@@ -9,6 +9,7 @@ import java.util.LinkedList;
 
 public class EVController extends CarController {
 
+    FOVUtils utils;
     private Action state = null;
     private Action backgroundState = null;
     private LinkedList<Action> aq;
@@ -16,10 +17,9 @@ public class EVController extends CarController {
     private IActionHandler th;
     private PersistentView pv;
 
-    FOVUtils utils;
-
     /**
      * Constructor
+     *
      * @param car
      */
     public EVController(Car car) {
@@ -35,9 +35,9 @@ public class EVController extends CarController {
         this.aq.add(this.backgroundState);
 
         pv = new PersistentView(this);
-        backgroundState = new FollowAction(this, c->{
+        backgroundState = new FollowAction(this, c -> {
             PersistentView.Property p = pv.get(c);
-            assert(p!=null);
+            assert (p != null);
             return p.logicalWall;
         });
     }
@@ -46,7 +46,7 @@ public class EVController extends CarController {
     public void update(float delta) {
         pv.update(getView());
         int kuy;
-        if((kuy=pv.fillDeadEnd(new Coordinate(getPosition()), getViewSquare()))>0){
+        if ((kuy = pv.fillDeadEnd(new Coordinate(getPosition()), getViewSquare())) > 0) {
             System.out.printf("Filled in %d dead ends.%n", kuy);
         }
 
@@ -56,11 +56,11 @@ public class EVController extends CarController {
         if (state == null || state.isCompleted()) {
             state = null;
 
-            /* if (utils.isDeadEnd(FOVUtils.IS_WALL)) {
+            if (utils.isDeadEnd(pv)) {
                 toDo = state = deh.getAction(getView());
             } else /*if (utils.isInVicinity(t->t instanceof TrapTile)) {
                 toDo = state = th.getAction(getView());
-            } else */{
+            } else */ {
                 toDo = backgroundState;
             }
 

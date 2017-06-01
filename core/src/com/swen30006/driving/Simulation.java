@@ -22,27 +22,29 @@ import world.World;
  * This class provides functionality for use within the simulation system. It is NOT intended to be
  * read or understood for SWEN30006 Part C. Comments have been intentionally removed to reinforce
  * this. We take no responsibility if you use all your time trying to understand this code.
- *
  */
 public class Simulation extends ApplicationAdapter implements InputProcessor {
 
-    SpriteBatch batch;
-    Texture img;
+    private static final int PLAYER_VIEW = 11;
     public static TiledMap map;
     public static long startTime;
     public static OrthographicCamera camera;
-    private World world;
-    OrthogonalTiledMapRenderer tiledMapRenderer;
-    private enum CameraMode {WORLD, PLAYER};
-    private static CameraMode CAMERA_MODE = CameraMode.WORLD;
-    private static final int PLAYER_VIEW = 11;
-    private static boolean gameWon = false;
     public static boolean DEBUG_MODE = false;
+    private static CameraMode CAMERA_MODE = CameraMode.WORLD;
+    private static boolean gameWon = false;
+    SpriteBatch batch;
+    Texture img;
+    OrthogonalTiledMapRenderer tiledMapRenderer;
+    private World world;
     private BitmapFont font;
 
+    public static void winGame() {
+        gameWon = true;
+
+    }
 
     @Override
-    public void create () {
+    public void create() {
 
         startTime = System.currentTimeMillis();
         // Define the asset manager
@@ -59,12 +61,12 @@ public class Simulation extends ApplicationAdapter implements InputProcessor {
 
         // Set the camera
         camera = new OrthographicCamera();
-        camera.setToOrtho(false,World.MAP_WIDTH,World.MAP_HEIGHT);
+        camera.setToOrtho(false, World.MAP_WIDTH, World.MAP_HEIGHT);
         camera.update();
 
         // Define scale per unit
         float unitScale = 1 / 32f;
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(map,unitScale);
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(map, unitScale);
         Gdx.input.setInputProcessor(this);
 
         // Initialize fonts
@@ -96,7 +98,7 @@ public class Simulation extends ApplicationAdapter implements InputProcessor {
         font.getData().setScale(2f);
         int offset = 1;
         //Relative to screen size.
-        font.draw(batch, health, World.MAP_PIXEL_SIZE, Gdx.graphics.getHeight() - offset*World.MAP_PIXEL_SIZE);
+        font.draw(batch, health, World.MAP_PIXEL_SIZE, Gdx.graphics.getHeight() - offset * World.MAP_PIXEL_SIZE);
         font.setColor(Color.GREEN);
         //If we win!
         if (gameWon) {
@@ -110,7 +112,7 @@ public class Simulation extends ApplicationAdapter implements InputProcessor {
             font.draw(batch, layout, fontX, fontY);
             font.setColor(Color.GREEN);
 
-            System.out.println("You escaped and it took: " + ((System.currentTimeMillis() - startTime) / 1000+" seconds!"));
+            System.out.println("You escaped and it took: " + ((System.currentTimeMillis() - startTime) / 1000 + " seconds!"));
 
             Gdx.app.exit();
         }
@@ -118,7 +120,7 @@ public class Simulation extends ApplicationAdapter implements InputProcessor {
     }
 
     @Override
-    public void dispose () {
+    public void dispose() {
     }
 
     @Override
@@ -140,13 +142,13 @@ public class Simulation extends ApplicationAdapter implements InputProcessor {
 
             camera.viewportWidth = World.MAP_WIDTH;
             camera.viewportHeight = World.MAP_HEIGHT;
-            camera.position.set(0,0,0);
+            camera.position.set(0, 0, 0);
             CAMERA_MODE = CameraMode.WORLD;
         }
         if (keycode == Input.Keys.F) {
             DEBUG_MODE = true;
         }
-        camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 100/camera.viewportWidth);
+        camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 100 / camera.viewportWidth);
 
         float effectiveViewportWidth = camera.viewportWidth * camera.zoom;
         float effectiveViewportHeight = camera.viewportHeight * camera.zoom;
@@ -195,9 +197,6 @@ public class Simulation extends ApplicationAdapter implements InputProcessor {
 
     }
 
-    public static void winGame() {
-        gameWon = true;
-
-    }
+    private enum CameraMode {WORLD, PLAYER}
 
 }

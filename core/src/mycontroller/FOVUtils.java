@@ -16,89 +16,17 @@ import java.util.function.Predicate;
  */
 public class FOVUtils {
 
-    public static final Predicate<MapTile> IS_WALL = t->t.getName().equals("Wall");
+    public static final Predicate<MapTile> IS_WALL = t -> t.getName().equals("Wall");
+    private final CarController con;
+    private int wallSensitivity = 2;
 
-    public boolean isDeadEnd(Predicate<Coordinate> isWall) {
-        Map<Coordinate, MapTile> view = con.getView();
-        Coordinate curpos = new Coordinate(con.getPosition());
-        WorldSpatial.Direction left = directionalAdd(con.getOrientation(), WorldSpatial.RelativeDirection.LEFT);
-
-        // first we check dead end on the left so car will not dumbly turn into one
-        if(!checkFollowing(isWall)){
-            int wallpos[] = {-1,-1,-1,-1};
-            int gapWidth = -1;
-            int gapDepth = -1;
-            // we start at -1 to check if previously following wall
-            // if not then this loop is meaningless
-            forwardLoop: for(int j = -1; j<4; j++) {
-                //find the closest wall not directly to the left
-                leftLoop: for (int i = j==0?wallSensitivity:0; i <= con.getViewSquare(); i++) {
-                    // east oriented, so left is positive y
-                    if (isWall.test(relativeAdd(j, i, con.getOrientation()))) {
-                        if(j==-1&&i<=wallSensitivity){
-
-                        }
-                        wallpos[j] = i;
-                        if(j!=0&&i<=wallSensitivity){
-                            gapWidth = j;
-                            break forwardLoop;
-                        } else {
-                            gapDepth = Math.max(gapDepth, i);
-                            break leftLoop;
-                        }
-                        //System.out.printf("Wall is %s %d steps away.%n",con.getOrientation().name(), i);
-                    }
-                }
-            }
-            if(gapWidth>0) {
-                System.out.println(con.getOrientation().name());
-                System.out.printf("Found gap of width:%d depth:%d wall=%d,%d,%d,%d %n", gapWidth, gapDepth, wallpos[0], wallpos[1], wallpos[2], wallpos[3]);
-                try {
-                    Thread.sleep(2000);
-                } catch(InterruptedException ex){
-
-                }
-                System.exit(0);
-            }
-        }
-        // TODO
-        return false;
-    }
-
-    public boolean isInVicinity(Predicate<MapTile> wantTile) {
-        Map<Coordinate, MapTile> view = con.getView();
-        for(int i=0; i<=wallSensitivity; i++) {
-            for(int j=-wallSensitivity; j<=wallSensitivity; j++) {
-                Coordinate nc = relativeAdd(i, j, con.getOrientation());
-                if (wantTile.test(view.get(nc))) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    public FOVUtils(CarController con) {
+        this.con = con;
     }
 
     public static int getDeadEndSize(Map<Coordinate, MapTile> view) {
         // TODO
         return -1;
-    }
-
-    public static class MapEntry<T extends MapTile> {
-        private final Coordinate coord;
-        private final T tile;
-
-        private MapEntry(Coordinate coord, T tile) {
-            this.coord = coord;
-            this.tile = tile;
-        }
-
-        public Coordinate getCoordinate() {
-            return coord;
-        }
-
-        public T getTile() {
-            return tile;
-        }
     }
 
     public static Coordinate getCenter(Map<Coordinate, MapTile> view) {
@@ -140,14 +68,9 @@ public class FOVUtils {
         }
     }
 
-    public boolean checkAhead(Predicate<Coordinate> p) {
-        return check(con.getOrientation(),p);
-    }
-
     public static WorldSpatial.Direction directionalAdd(
             WorldSpatial.Direction dir,
-            WorldSpatial.RelativeDirection rdir)
-    {
+            WorldSpatial.RelativeDirection rdir) {
         ArrayList<WorldSpatial.Direction> dirs = new ArrayList<>(4);
         dirs.add(WorldSpatial.Direction.NORTH);
         dirs.add(WorldSpatial.Direction.EAST);
@@ -159,36 +82,13 @@ public class FOVUtils {
         } else {
             i++;
         }
-        i = (i+4)%4;
+        i = (i + 4) % 4;
         return dirs.get(i);
     }
 
-    public boolean checkFollowing(Predicate<Coordinate> p) {
-        return check(directionalAdd(con.getOrientation(), WorldSpatial.RelativeDirection.LEFT), p);
-    }
-    private int wallSensitivity = 2;
-    public boolean check(WorldSpatial.Direction dir, Predicate<Coordinate> p) {
-        for(int i=0; i<=wallSensitivity; i++) {
-            if (p.test(relativeAdd(i, 0, dir))) {
-                return true;
-            }
-        }
-        return false;
-    }
-    private final CarController con;
-
-    public FOVUtils(CarController con) {
-        this.con=con;
-    }
-
-
-    public Coordinate relativeAdd(int x, int y, WorldSpatial.Direction dir) {
-        return directionalCoordinateAdd(new Coordinate(con.getPosition()), new Coordinate(x,y), dir);
-    }
-
-    public static Coordinate directionalCoordinateAdd(Coordinate u, Coordinate v, WorldSpatial.Direction dir){
+    public static Coordinate directionalCoordinateAdd(Coordinate u, Coordinate v, WorldSpatial.Direction dir) {
         int dx = 0, dy = 0;
-        switch(dir) {
+        switch (dir) {
             // we are east oriented (theta=0)
             /*
             R = [ dx     [ cos t, -sin t
@@ -212,7 +112,100 @@ public class FOVUtils {
                 break;
         }
 
-        return new Coordinate(u.x+dx, u.y+dy);
+        return new Coordinate(u.x + dx, u.y + dy);
+    }
+
+    public boolean isDeadEnd(PersistentView view) {
+        // TODO
+
+        int frontWall = -1;
+        for (int x = 1; x <= con.getViewSquare(); x++) {
+            Coordinate c = relativeAdd(x, 0, con.getOrientation());
+            PersistentView.Property p = view.get(c);
+            if (p == null) break;
+            if (p.logicalWall) {
+                frontWall = x;
+                break;
+            }
+        }
+        if (frontWall == -1) return false;
+
+        int leftWall = Integer.MIN_VALUE;
+        int rightWall = Integer.MAX_VALUE;
+        for (int x = frontWall - 1; x >= 0; x--) {
+            boolean foundLeft = false;
+            boolean foundRight = false;
+            for (int y = -con.getViewSquare(); y <= con.getViewSquare(); y++) {
+                Coordinate c = relativeAdd(x, y, con.getOrientation());
+                PersistentView.Property p = view.get(c);
+                if (p == null) continue;
+                if (p.logicalWall) {
+                    if (y <= 0) {
+                        foundLeft = true;
+                        leftWall = Math.max(leftWall, y);
+                    }
+                    if (y >= 0) {
+                        foundRight = true;
+                        rightWall = Math.min(rightWall, y);
+                    }
+                }
+            }
+            if (!(foundLeft && foundRight)) return false;
+        }
+        System.out.printf("Found dead end at %s at %d in front having L-R: %d-%d%n", con.getPosition(), frontWall, -leftWall, rightWall);
+        return true;
+    }
+
+    public boolean isInVicinity(Predicate<MapTile> wantTile) {
+        Map<Coordinate, MapTile> view = con.getView();
+        for (int i = 0; i <= wallSensitivity; i++) {
+            for (int j = -wallSensitivity; j <= wallSensitivity; j++) {
+                Coordinate nc = relativeAdd(i, j, con.getOrientation());
+                if (wantTile.test(view.get(nc))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean checkAhead(Predicate<Coordinate> p) {
+        return check(con.getOrientation(), p);
+    }
+
+    public boolean checkFollowing(Predicate<Coordinate> p) {
+        return check(directionalAdd(con.getOrientation(), WorldSpatial.RelativeDirection.LEFT), p);
+    }
+
+    public boolean check(WorldSpatial.Direction dir, Predicate<Coordinate> p) {
+        for (int i = 0; i <= wallSensitivity; i++) {
+            if (p.test(relativeAdd(i, 0, dir))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Coordinate relativeAdd(int x, int y, WorldSpatial.Direction dir) {
+        return directionalCoordinateAdd(new Coordinate(con.getPosition()), new Coordinate(x, y), dir);
+    }
+
+    public static class MapEntry<T extends MapTile> {
+        private final Coordinate coord;
+        private final T tile;
+
+        private MapEntry(Coordinate coord, T tile) {
+            this.coord = coord;
+            this.tile = tile;
+        }
+
+        public Coordinate getCoordinate() {
+            return coord;
+        }
+
+        public T getTile() {
+            return tile;
+        }
     }
 
 }
