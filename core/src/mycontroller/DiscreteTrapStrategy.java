@@ -18,7 +18,7 @@ public class DiscreteTrapStrategy implements IActionHandler {
     }
 
     public Action getAction(Map<Coordinate, MapTile> view) {
-        return new FollowAction(con, t->t instanceof TrapTile);
+        return new FollowAction(con, t->con.getView().get(t) instanceof TrapTile);
 //        TrapTile closest = FOVUtils.getClosest(view, TrapTile.class);
 //        assert(closest!=null);
 //        TrapHandler handler = getHandlerFor(closest.getClass());

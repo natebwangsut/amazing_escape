@@ -15,7 +15,52 @@ import java.util.function.Predicate;
  * Created by Kolatat on 23/5/17.
  */
 public class FOVUtils {
-    public static boolean isDeadEnd(Map<Coordinate, MapTile> view) {
+
+    public static final Predicate<MapTile> IS_WALL = t->t.getName().equals("Wall");
+
+    public boolean isDeadEnd(Predicate<Coordinate> isWall) {
+        Map<Coordinate, MapTile> view = con.getView();
+        Coordinate curpos = new Coordinate(con.getPosition());
+        WorldSpatial.Direction left = directionalAdd(con.getOrientation(), WorldSpatial.RelativeDirection.LEFT);
+
+        // first we check dead end on the left so car will not dumbly turn into one
+        if(!checkFollowing(isWall)){
+            int wallpos[] = {-1,-1,-1,-1};
+            int gapWidth = -1;
+            int gapDepth = -1;
+            // we start at -1 to check if previously following wall
+            // if not then this loop is meaningless
+            forwardLoop: for(int j = -1; j<4; j++) {
+                //find the closest wall not directly to the left
+                leftLoop: for (int i = j==0?wallSensitivity:0; i <= con.getViewSquare(); i++) {
+                    // east oriented, so left is positive y
+                    if (isWall.test(relativeAdd(j, i, con.getOrientation()))) {
+                        if(j==-1&&i<=wallSensitivity){
+
+                        }
+                        wallpos[j] = i;
+                        if(j!=0&&i<=wallSensitivity){
+                            gapWidth = j;
+                            break forwardLoop;
+                        } else {
+                            gapDepth = Math.max(gapDepth, i);
+                            break leftLoop;
+                        }
+                        //System.out.printf("Wall is %s %d steps away.%n",con.getOrientation().name(), i);
+                    }
+                }
+            }
+            if(gapWidth>0) {
+                System.out.println(con.getOrientation().name());
+                System.out.printf("Found gap of width:%d depth:%d wall=%d,%d,%d,%d %n", gapWidth, gapDepth, wallpos[0], wallpos[1], wallpos[2], wallpos[3]);
+                try {
+                    Thread.sleep(2000);
+                } catch(InterruptedException ex){
+
+                }
+                System.exit(0);
+            }
+        }
         // TODO
         return false;
     }
@@ -95,7 +140,7 @@ public class FOVUtils {
         }
     }
 
-    public boolean checkAhead(Predicate<MapTile> p) {
+    public boolean checkAhead(Predicate<Coordinate> p) {
         return check(con.getOrientation(),p);
     }
 
@@ -118,13 +163,13 @@ public class FOVUtils {
         return dirs.get(i);
     }
 
-    public boolean checkFollowing(Predicate<MapTile> p) {
+    public boolean checkFollowing(Predicate<Coordinate> p) {
         return check(directionalAdd(con.getOrientation(), WorldSpatial.RelativeDirection.LEFT), p);
     }
     private int wallSensitivity = 2;
-    public boolean check(WorldSpatial.Direction dir, Predicate<MapTile> p) {
+    public boolean check(WorldSpatial.Direction dir, Predicate<Coordinate> p) {
         for(int i=0; i<=wallSensitivity; i++) {
-            if (p.test(con.getView().get(relativeAdd(i, 0, dir)))) {
+            if (p.test(relativeAdd(i, 0, dir))) {
                 return true;
             }
         }
@@ -136,7 +181,12 @@ public class FOVUtils {
         this.con=con;
     }
 
+
     public Coordinate relativeAdd(int x, int y, WorldSpatial.Direction dir) {
+        return directionalCoordinateAdd(new Coordinate(con.getPosition()), new Coordinate(x,y), dir);
+    }
+
+    public static Coordinate directionalCoordinateAdd(Coordinate u, Coordinate v, WorldSpatial.Direction dir){
         int dx = 0, dy = 0;
         switch(dir) {
             // we are east oriented (theta=0)
@@ -145,24 +195,24 @@ public class FOVUtils {
                   dy ] x   sin t,  cos t  ]
              */
             case EAST:
-                dx = x;
-                dy = y;
+                dx = v.x;
+                dy = v.y;
                 break;
             case NORTH:
-                dy = x;
-                dx = -y;
+                dy = v.x;
+                dx = -v.y;
                 break;
             case WEST:
-                dx = -x;
-                dy = -y;
+                dx = -v.x;
+                dy = -v.y;
                 break;
             case SOUTH:
-                dy = -x;
-                dx = y;
+                dy = -v.x;
+                dx = v.y;
                 break;
         }
-        Coordinate curPos = new Coordinate(con.getPosition());
-        return new Coordinate(curPos.x+dx, curPos.y+dy);
+
+        return new Coordinate(u.x+dx, u.y+dy);
     }
 
 }

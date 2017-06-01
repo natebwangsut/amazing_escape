@@ -2,6 +2,7 @@ package mycontroller;
 
 import controller.CarController;
 import tiles.MapTile;
+import utilities.Coordinate;
 import world.WorldSpatial;
 
 import java.util.function.Predicate;
@@ -11,9 +12,9 @@ import java.util.function.Predicate;
  */
 public class FollowAction extends Action {
 
-    protected final Predicate<MapTile> tileTest;
+    protected final Predicate<Coordinate> tileTest;
 
-    public FollowAction(CarController controller, Predicate<MapTile> tileTest) {
+    public FollowAction(CarController controller, Predicate<Coordinate> tileTest) {
         super(controller);
         this.tileTest = tileTest;
     }
