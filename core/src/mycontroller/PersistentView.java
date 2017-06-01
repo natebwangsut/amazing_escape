@@ -1,6 +1,8 @@
 package mycontroller;
 
 import controller.CarController;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import tiles.LavaTrap;
 import tiles.MapTile;
 import tiles.MudTrap;
@@ -14,6 +16,9 @@ import java.util.Map;
  * Created by Kolatat on 1/6/17.
  */
 public class PersistentView {
+
+    private static Logger logger = LogManager.getLogger();
+
     final CarController con;
     final FOVUtils utils;
     protected Map<Coordinate, Property> masterView = new HashMap<>();
@@ -70,14 +75,14 @@ public class PersistentView {
                 continue directional;
             }
             if (i > 0 && i < 4) {
-                System.out.printf("Filling ");
+                logger.info("Filling ");
                 for (int j = 0; j < i; j++) {
                     Coordinate c = FOVUtils.directionalCoordinateAdd(start, new Coordinate(j, 0), dir);
                     Property p = get(c);
                     p.logicalWall = true;
-                    System.out.printf("[%s]", c);
+                    logger.info("[{}]", c);
                 }
-                System.out.println();
+                //logger.info("");  // break-line for
                 dec++;
             }
         }

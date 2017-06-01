@@ -29,8 +29,8 @@ import world.WorldSpatial.Direction;
  * read or understood for SWEN30006 Part C. Comments have been intentionally removed to reinforce
  * this. We take no responsibility if you use all your time trying to understand this code.
  */
-public class Car extends Sprite {
 
+public class Car extends Sprite {
 
     public static final int VIEW_SQUARE = 3;
     private static final float MAX_SPEED = 5f;
@@ -45,6 +45,7 @@ public class Car extends Sprite {
     private static final float FRICTION_FORCE = 0.5f;
     private static final int SNAP_THRESHOLD = 5;
     private static final int INITIAL_HEALTH = 100;
+
     // Logger
     private static Logger logger = LogManager.getLogger();
     private static State carDirection = State.FORWARD;

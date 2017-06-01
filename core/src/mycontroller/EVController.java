@@ -1,6 +1,8 @@
 package mycontroller;
 
 import controller.CarController;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import tiles.TrapTile;
 import utilities.Coordinate;
 import world.Car;
@@ -8,6 +10,8 @@ import world.Car;
 import java.util.LinkedList;
 
 public class EVController extends CarController {
+
+    private static Logger logger = LogManager.getLogger();
 
     FOVUtils utils;
     private Action state = null;
@@ -44,10 +48,12 @@ public class EVController extends CarController {
 
     @Override
     public void update(float delta) {
+
         pv.update(getView());
+
         int kuy;
         if ((kuy = pv.fillDeadEnd(new Coordinate(getPosition()), getViewSquare())) > 0) {
-            System.out.printf("Filled in %d dead ends.%n", kuy);
+            logger.info("Filled in {} dead ends.", kuy);
         }
 
         Action toDo = null;
@@ -65,9 +71,12 @@ public class EVController extends CarController {
             }
 
         } else {
+            // Use the previous instruction
             toDo = state;
         }
 
-        toDo.update(delta);
+        // Not doing anything if null
+        if (toDo != null)
+            toDo.update(delta);
     }
 }

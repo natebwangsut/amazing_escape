@@ -1,6 +1,8 @@
 package mycontroller;
 
 import controller.CarController;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import tiles.MapTile;
 import utilities.Coordinate;
 import world.WorldSpatial;
@@ -15,6 +17,8 @@ import java.util.function.Predicate;
  * Created by Kolatat on 23/5/17.
  */
 public class FOVUtils {
+
+    private static Logger logger = LogManager.getLogger();
 
     public static final Predicate<MapTile> IS_WALL = t -> t.getName().equals("Wall");
     private final CarController con;
@@ -152,7 +156,8 @@ public class FOVUtils {
             }
             if (!(foundLeft && foundRight)) return false;
         }
-        System.out.printf("Found dead end at %s at %d in front having L-R: %d-%d%n", con.getPosition(), frontWall, -leftWall, rightWall);
+
+        logger.info("Found dead end at {} at {} in front having L-R: {}-{}", con.getPosition(), frontWall, -leftWall, rightWall);
         return true;
     }
 
