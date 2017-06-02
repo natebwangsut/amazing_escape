@@ -1,7 +1,8 @@
-package mycontroller;
+package mycontroller.actions;
 
 import com.badlogic.gdx.math.Vector2;
 import controller.CarController;
+import mycontroller.FOVUtils;
 import mycontroller.actions.DeadEndAction;
 import tiles.MapTile;
 import utilities.Coordinate;
@@ -28,12 +29,13 @@ public class ThreePointTurnAction extends DeadEndAction {
         return theta % 360;
     }
 
-    protected ThreePointTurnAction(CarController con, Map<Coordinate, MapTile> view, FOVUtils.DeadEnd de) {
+    public ThreePointTurnAction(CarController con, Map<Coordinate, MapTile> view, FOVUtils.DeadEnd de) {
         super(con, view, de);
         incomingDir = con.getOrientation();
         incoming = con.getAngle();
         float step = 60; // degrees
-        if (de.recommendedTurn == WorldSpatial.RelativeDirection.RIGHT) step = -step;
+        if (de.recommendedTurn == WorldSpatial.RelativeDirection.RIGHT)
+            step = -step;
         target1 = incoming + step;
         target2 = incoming - step;
         target3 = incoming + 180;
@@ -59,16 +61,18 @@ public class ThreePointTurnAction extends DeadEndAction {
         return isAngleSimilar(car, vel + 180, T_THRESHOLD);
     }
 
-    private void setPhase(Phase p){
+    private void setPhase(Phase p) {
         phase = p;
         logger.info("Switching phase into {0}", p.name());
     }
 
     @Override
     public void update(float delta) {
+
         incomingDir = controller.getOrientation();
         super.update(delta);
         switch (phase) {
+
             case DECELERATE:
                 if (controller.getVelocity() < 0.8) {
                     controller.applyForwardAcceleration();
@@ -78,45 +82,57 @@ public class ThreePointTurnAction extends DeadEndAction {
                     setPhase(Phase.POINT1_T);
                 }
                 break;
+
             case POINT1_T:
                 if (deadEnd.recommendedTurn == WorldSpatial.RelativeDirection.LEFT) {
                     applyLeftTurn(incomingDir, delta);
                 } else {
                     applyRightTurn(incomingDir, delta);
                 }
-                if (isAngleSimilar(controller.getAngle(), target1, T_THRESHOLD)) setPhase(Phase.POINT1_B);
+                if (isAngleSimilar(controller.getAngle(), target1, T_THRESHOLD))
+                    setPhase(Phase.POINT1_B);
                 break;
+
             case POINT1_B:
                 controller.applyReverseAcceleration();
-                if (controller.getVelocity() < 0.1 || isReversing()){
+                if (controller.getVelocity() < 0.1 || isReversing()) {
                     setPhase(Phase.POINT2_R);
                 }
                 break;
+
             case POINT2_R:
                 if (deadEnd.recommendedTurn == WorldSpatial.RelativeDirection.LEFT) {
                     applyLeftTurn(incomingDir, delta);
                 } else {
                     applyRightTurn(incomingDir, delta);
                 }
-                if(controller.getVelocity()<1) controller.applyReverseAcceleration();
-                if (isAngleSimilar(controller.getAngle(), target2, T_THRESHOLD)) setPhase(Phase.POINT2_B);
+                if (controller.getVelocity()<1)
+                    controller.applyReverseAcceleration();
+                if (isAngleSimilar(controller.getAngle(), target2, T_THRESHOLD))
+                    setPhase(Phase.POINT2_B);
                 break;
+
             case POINT2_B:
                 controller.applyForwardAcceleration();
                 if (controller.getVelocity() > 0.1 && !isReversing()) phase = Phase.POINT3_A;
                 break;
+
             case POINT3_A:
                 if (deadEnd.recommendedTurn == WorldSpatial.RelativeDirection.LEFT) {
                     applyLeftTurn(incomingDir, delta);
                 } else {
                     applyRightTurn(incomingDir, delta);
                 }
-                if (controller.getVelocity() < 1) controller.applyForwardAcceleration();
-                if (isAngleSimilar(controller.getAngle(), target3, T_THRESHOLD)) phase = Phase.ACCELERATION;
+                if (controller.getVelocity() < 1)
+                    controller.applyForwardAcceleration();
+                if (isAngleSimilar(controller.getAngle(), target3, T_THRESHOLD))
+                    phase = Phase.ACCELERATION;
                 break;
+
             case ACCELERATION:
                 controller.applyForwardAcceleration();
-                if (controller.getVelocity() > CAR_SPEED) phase = Phase.COMPLETED;
+                if (controller.getVelocity() > CAR_SPEED)
+                    phase = Phase.COMPLETED;
                 break;
         }
     }

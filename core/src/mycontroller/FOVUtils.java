@@ -127,7 +127,7 @@ public class FOVUtils {
         int ahead;
         int left;
         int right;
-        WorldSpatial.RelativeDirection recommendedTurn;
+        public WorldSpatial.RelativeDirection recommendedTurn;
         public int turnSize;
     }
 
@@ -177,7 +177,7 @@ public class FOVUtils {
             // mustve found at least one of each otherwise it is not a dead end
             if (!(foundLeft && foundRight)) return null;
         }
-        if(rightWall>=3) return null; // big enough room to turn so no
+        if (rightWall>=3) return null; // big enough room to turn so no
         logger.info("Found dead end at {} at {} in front having L-R: {}-{}", con.getPosition(), frontWall, -leftWall, rightWall);
         DeadEnd de = new DeadEnd();
         de.ahead = frontWall;
@@ -186,7 +186,7 @@ public class FOVUtils {
         de.right = rightWall;
         de.origin = new Coordinate(con.getPosition());
         // turn to the side with larger space
-        if(leftWall > rightWall) {
+        if (leftWall > rightWall) {
             de.recommendedTurn = WorldSpatial.RelativeDirection.LEFT;
             de.turnSize = de.left;
         } else {

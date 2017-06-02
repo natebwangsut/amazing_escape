@@ -34,24 +34,31 @@ public class EfficientUTurnAction extends DeadEndAction {
     public void update(float delta) {
         super.update(delta);
         switch(phase) {
+            //
             case SETUP:
                 controller.applyReverseAcceleration();
-                if(controller.getVelocity() < 1.5) phase = Phase.TURNING;
+                if (controller.getVelocity() < 1.5)
+                    phase = Phase.TURNING;
                 break;
+            //
             case TURNING:
-                if(controller.getVelocity() < 0.5) controller.applyForwardAcceleration();
+                if (controller.getVelocity() < 0.5)
+                    controller.applyForwardAcceleration();
                 applyRightTurn(controller.getOrientation(), delta);
-                if(controller.getOrientation() == target) phase = Phase.ACCELERATING;
+                if (controller.getOrientation() == target)
+                    phase = Phase.ACCELERATING;
                 break;
+            //
             case ACCELERATING:
                 controller.applyForwardAcceleration();
-                if(controller.getVelocity() >= CAR_SPEED) phase = Phase.COMPLETED;
+                if (controller.getVelocity() >= CAR_SPEED)
+                    phase = Phase.COMPLETED;
                 break;
         }
     }
 
     @Override
     public boolean isCompleted() {
-        return phase==Phase.COMPLETED;
+        return phase == Phase.COMPLETED;
     }
 }

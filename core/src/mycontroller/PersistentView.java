@@ -133,7 +133,7 @@ public class PersistentView {
         // I will not fill dead ends when car is currently in a virtual wall
         Property p = get(new Coordinate(con.getPosition()));
         assert(p!=null);
-        if(p.logicalWall && !p.tile.getName().equals("Wall")) return 0;
+        if (p.logicalWall && !p.tile.getName().equals("Wall")) return 0;
 
         int totalDef = 0;
         // indicates the number of dead ends filled in a single loop
