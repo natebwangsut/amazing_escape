@@ -13,7 +13,7 @@ public class EVController extends CarController {
     private Action state = null;
     private Action backgroundState = null;
     private LinkedList<Action> aq;
-    private IActionHandler deh;
+    private DeadEndHandler deh;
     private IActionHandler th;
     private PersistentView pv;
 
@@ -45,10 +45,6 @@ public class EVController extends CarController {
     @Override
     public void update(float delta) {
         pv.update(getView());
-        int kuy;
-        if ((kuy = pv.fillDeadEnd(new Coordinate(getPosition()), getViewSquare())) > 0) {
-            System.out.printf("Filled in %d dead ends.%n", kuy);
-        }
 
         Action toDo = null;
         toDo = backgroundState;
@@ -56,8 +52,15 @@ public class EVController extends CarController {
         if (state == null || state.isCompleted()) {
             state = null;
 
-            if (utils.isDeadEnd(pv)) {
-                toDo = state = deh.getAction(getView());
+            // fill dead end only if we are not working on a specific task and just following wall
+            int kuy;
+            if ((kuy = pv.fillDeadEnd(new Coordinate(getPosition()), getViewSquare())) > 0) {
+                System.out.printf("Filled in %d dead ends.%n", kuy);
+            }
+
+            FOVUtils.DeadEnd de;
+            if ((de=utils.deadEndAhead(pv))!=null) {
+                toDo = state = deh.getAction(getView(),de);
             } else /*if (utils.isInVicinity(t->t instanceof TrapTile)) {
                 toDo = state = th.getAction(getView());
             } else */ {

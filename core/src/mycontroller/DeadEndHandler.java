@@ -11,7 +11,7 @@ import utilities.Coordinate;
 
 import java.util.Map;
 
-public class DeadEndHandler implements IActionHandler {
+public class DeadEndHandler {
 
     private CarController controller;
 
@@ -19,13 +19,12 @@ public class DeadEndHandler implements IActionHandler {
         this.controller = controller;
     }
 
-    @Override
-    public Action getAction(Map<Coordinate, MapTile> view) {
-        int size = FOVUtils.getDeadEndSize(view);
-        return getActionBasedOnSize(view, size);
+    public Action getAction(Map<Coordinate, MapTile> view, FOVUtils.DeadEnd deadEnd) {
+        return getActionBasedOnSize(view, deadEnd);
     }
 
-    private Action getActionBasedOnSize(Map<Coordinate, MapTile> view, int size) {
+    private Action getActionBasedOnSize(Map<Coordinate, MapTile> view, FOVUtils.DeadEnd deadEnd) {
+        int size = deadEnd.turnSize;
         if (size >= 3) {
             // u-turn
         } else if (size == 2) {

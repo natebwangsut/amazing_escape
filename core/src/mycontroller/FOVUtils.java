@@ -115,9 +115,18 @@ public class FOVUtils {
         return new Coordinate(u.x + dx, u.y + dy);
     }
 
-    public boolean isDeadEnd(PersistentView view) {
-        // TODO
+    public class DeadEnd {
+        Coordinate origin;
+        WorldSpatial.Direction direction;
+        int ahead;
+        int left;
+        int right;
+        WorldSpatial.RelativeDirection recommendedTurn;
+        int turnSize;
+    }
 
+    public DeadEnd deadEndAhead(PersistentView view) {
+        // number of tiles till wall in front
         int frontWall = -1;
         for (int x = 1; x <= con.getViewSquare(); x++) {
             Coordinate c = relativeAdd(x, 0, con.getOrientation());
@@ -128,13 +137,22 @@ public class FOVUtils {
                 break;
             }
         }
-        if (frontWall == -1) return false;
+        // if not found then no dead end
+        if (frontWall == -1) return null;
 
+        /*
+        ? X X X X ?
+        ?????|?????  ^
+        ?????|?????  | we test left and right wall (from car's trajectory) up to front wall
+        ?????C?????
+         */
         int leftWall = Integer.MIN_VALUE;
         int rightWall = Integer.MAX_VALUE;
+        // reverse from wall down to car because there might not be walls closer to us
         for (int x = frontWall - 1; x >= 0; x--) {
             boolean foundLeft = false;
             boolean foundRight = false;
+            // loop through all tiles in the current row
             for (int y = -con.getViewSquare(); y <= con.getViewSquare(); y++) {
                 Coordinate c = relativeAdd(x, y, con.getOrientation());
                 PersistentView.Property p = view.get(c);
@@ -150,10 +168,25 @@ public class FOVUtils {
                     }
                 }
             }
-            if (!(foundLeft && foundRight)) return false;
+            // mustve found at least one of each otherwise it is not a dead end
+            if (!(foundLeft && foundRight)) return null;
         }
-        System.out.printf("Found dead end at %s at %d in front having L-R: %d-%d%n", con.getPosition(), frontWall, -leftWall, rightWall);
-        return true;
+        System.out.printf("Found dead end from %s up ahead %d having L-R: %d-%d%n", con.getPosition(), frontWall, -leftWall, rightWall);
+        DeadEnd de = new DeadEnd();
+        de.ahead = frontWall;
+        de.direction = con.getOrientation();
+        de.left = -leftWall;
+        de.right = rightWall;
+        de.origin = new Coordinate(con.getPosition());
+        // turn to the side with larger space
+        if(-leftWall > rightWall){
+            de.recommendedTurn = WorldSpatial.RelativeDirection.LEFT;
+            de.turnSize = de.left;
+        } else {
+            de.recommendedTurn = WorldSpatial.RelativeDirection.RIGHT;
+            de.turnSize = de.right;
+        }
+        return de;
     }
 
     public boolean isInVicinity(Predicate<MapTile> wantTile) {
