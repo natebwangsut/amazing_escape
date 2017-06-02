@@ -1,12 +1,16 @@
 package mycontroller;
 
 import controller.CarController;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import world.WorldSpatial;
 
 /**
  * Created by Kolatat on 23/5/17.
  */
 public abstract class Action implements IAction {
+
+    protected Logger logger = LogManager.getLogger();
 
     // Car Speed to move at
     public static final float CAR_SPEED = 3;
