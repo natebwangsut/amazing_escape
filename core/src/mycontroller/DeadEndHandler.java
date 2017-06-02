@@ -34,7 +34,7 @@ public class DeadEndHandler {
         } else {
             // fuck you
         }
-        return null;
+        return new UTurnAction(controller, view, deadEnd);
     }
 
     public void uTurn() {

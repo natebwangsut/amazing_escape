@@ -146,7 +146,7 @@ public class FOVUtils {
         ?????|?????  | we test left and right wall (from car's trajectory) up to front wall
         ?????C?????
          */
-        int leftWall = Integer.MIN_VALUE;
+        int leftWall = Integer.MAX_VALUE;
         int rightWall = Integer.MAX_VALUE;
         // reverse from wall down to car because there might not be walls closer to us
         for (int x = frontWall - 1; x >= 0; x--) {
@@ -158,28 +158,29 @@ public class FOVUtils {
                 PersistentView.Property p = view.get(c);
                 if (p == null) continue;
                 if (p.logicalWall) {
-                    if (y <= 0) {
-                        foundLeft = true;
-                        leftWall = Math.max(leftWall, y);
-                    }
                     if (y >= 0) {
+                        foundLeft = true;
+                        leftWall = Math.min(leftWall, y);
+                    }
+                    if (y <= 0) {
                         foundRight = true;
-                        rightWall = Math.min(rightWall, y);
+                        rightWall = Math.min(rightWall, -y);
                     }
                 }
             }
             // mustve found at least one of each otherwise it is not a dead end
             if (!(foundLeft && foundRight)) return null;
         }
-        System.out.printf("Found dead end from %s up ahead %d having L-R: %d-%d%n", con.getPosition(), frontWall, -leftWall, rightWall);
+        if(rightWall>=3) return null; // big enough room to turn so no
+        System.out.printf("Found dead end from %s up ahead %d having L-R: %d-%d%n", con.getPosition(), frontWall, leftWall, rightWall);
         DeadEnd de = new DeadEnd();
         de.ahead = frontWall;
         de.direction = con.getOrientation();
-        de.left = -leftWall;
+        de.left = leftWall;
         de.right = rightWall;
         de.origin = new Coordinate(con.getPosition());
         // turn to the side with larger space
-        if(-leftWall > rightWall){
+        if(leftWall > rightWall){
             de.recommendedTurn = WorldSpatial.RelativeDirection.LEFT;
             de.turnSize = de.left;
         } else {
