@@ -1,4 +1,4 @@
-package mycontroller;
+package mycontroller.actions;
 
 import controller.CarController;
 import org.apache.logging.log4j.LogManager;

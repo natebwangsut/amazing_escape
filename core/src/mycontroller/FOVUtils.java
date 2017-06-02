@@ -126,7 +126,7 @@ public class FOVUtils {
         int left;
         int right;
         WorldSpatial.RelativeDirection recommendedTurn;
-        int turnSize;
+        public int turnSize;
     }
 
     public DeadEnd deadEndAhead(PersistentView view) {
@@ -176,7 +176,7 @@ public class FOVUtils {
             if (!(foundLeft && foundRight)) return null;
         }
         if(rightWall>=3) return null; // big enough room to turn so no
-        System.out.printf("Found dead end from %s up ahead %d having L-R: %d-%d%n", con.getPosition(), frontWall, leftWall, rightWall);
+        logger.info("Found dead end at {} at {} in front having L-R: {}-{}", con.getPosition(), frontWall, -leftWall, rightWall);
         DeadEnd de = new DeadEnd();
         de.ahead = frontWall;
         de.direction = con.getOrientation();
@@ -191,9 +191,7 @@ public class FOVUtils {
             de.recommendedTurn = WorldSpatial.RelativeDirection.RIGHT;
             de.turnSize = de.right;
         }
-
-        logger.info("Found dead end at {} at {} in front having L-R: {}-{}", con.getPosition(), frontWall, -leftWall, rightWall);
-        return true;
+        return de;
     }
 
     public boolean isInVicinity(Predicate<MapTile> wantTile) {

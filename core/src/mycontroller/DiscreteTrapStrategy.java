@@ -1,6 +1,9 @@
 package mycontroller;
 
 import controller.CarController;
+import mycontroller.actions.Action;
+import mycontroller.actions.FollowAction;
+import mycontroller.handler.IActionHandler;
 import mycontroller.handler.TrapHandler;
 import tiles.*;
 import utilities.Coordinate;

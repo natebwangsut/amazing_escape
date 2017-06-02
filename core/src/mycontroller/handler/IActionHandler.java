@@ -1,5 +1,6 @@
-package mycontroller;
+package mycontroller.handler;
 
+import mycontroller.actions.Action;
 import tiles.MapTile;
 import utilities.Coordinate;
 

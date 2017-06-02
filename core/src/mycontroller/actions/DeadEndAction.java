@@ -1,6 +1,7 @@
-package mycontroller;
+package mycontroller.actions;
 
 import controller.CarController;
+import mycontroller.FOVUtils;
 import tiles.MapTile;
 import utilities.Coordinate;
 

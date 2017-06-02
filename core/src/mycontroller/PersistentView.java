@@ -101,8 +101,8 @@ public class PersistentView {
                 if (p == null || p2 == null) continue directional;
 
                 /*
-                As stated above, we require a logical wall right above a road
-                and the road must also only be a road and not a logical wall
+                 * As stated above, we require a logical wall right above a road
+                 * and the road must also only be a road and not a logical wall
                  */
                 if (p.tile.getName().equals("Road") && !p.logicalWall && p2.logicalWall) continue width;
 
@@ -111,7 +111,8 @@ public class PersistentView {
 
                 continue directional;
             }
-            if (i > 0 && i < 4) {
+
+            if (i > 0 && i <= MAX_DE_GAP_SIZE) {
                 logger.info("Filling ");
                 for (int j = 0; j < i; j++) {
                     // mark all roads in here as logical walls
@@ -120,7 +121,6 @@ public class PersistentView {
                     p.logicalWall = true;
                     logger.info("[{}]", c);
                 }
-                //logger.info("");  // break-line for
                 dec++;
             }
         }

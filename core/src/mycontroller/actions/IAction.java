@@ -1,4 +1,4 @@
-package mycontroller;
+package mycontroller.actions;
 
 /*
  * Nate Bhurinat W. (@natebwangsut | nate.bwangsut@gmail.com)

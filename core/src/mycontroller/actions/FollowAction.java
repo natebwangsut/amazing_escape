@@ -1,7 +1,7 @@
-package mycontroller;
+package mycontroller.actions;
 
 import controller.CarController;
-import tiles.MapTile;
+import mycontroller.actions.Action;
 import utilities.Coordinate;
 import world.WorldSpatial;
 

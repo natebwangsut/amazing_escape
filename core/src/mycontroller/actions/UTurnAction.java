@@ -1,6 +1,7 @@
-package mycontroller;
+package mycontroller.actions;
 
 import controller.CarController;
+import mycontroller.FOVUtils;
 import tiles.MapTile;
 import utilities.Coordinate;
 import world.WorldSpatial;
@@ -10,7 +11,7 @@ import java.util.Map;
 /**
  * Created by Kolatat on 2/6/17.
  */
-public class UTurnAction extends DeadEndAction{
+public class UTurnAction extends DeadEndAction {
 
     public UTurnAction(CarController con, Map<Coordinate, MapTile> view, FOVUtils.DeadEnd de){
         super(con,view,de);
@@ -32,7 +33,7 @@ public class UTurnAction extends DeadEndAction{
         switch(phase){
             case BRAKING:
                 controller.applyReverseAcceleration();
-                if(controller.getVelocity()<0.7) phase = Phase.TURNING;
+                if(controller.getVelocity() < 0.7) phase = Phase.TURNING;
                 break;
             case TURNING:
                 if(controller.getVelocity()<0.3) controller.applyForwardAcceleration();
@@ -41,7 +42,7 @@ public class UTurnAction extends DeadEndAction{
                 break;
             case ACCELERATING:
                 controller.applyForwardAcceleration();
-                if(controller.getVelocity()>=CAR_SPEED) phase = Phase.COMPLETED;;
+                if(controller.getVelocity()>=CAR_SPEED) phase = Phase.COMPLETED;
                 break;
         }
     }

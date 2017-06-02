@@ -1,9 +1,12 @@
 package mycontroller;
 
 import controller.CarController;
+import mycontroller.actions.Action;
+import mycontroller.actions.FollowAction;
+import mycontroller.handler.DeadEndHandler;
+import mycontroller.handler.IActionHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import tiles.TrapTile;
 import utilities.Coordinate;
 import world.Car;
 
@@ -13,7 +16,7 @@ public class EVController extends CarController {
 
     private static Logger logger = LogManager.getLogger();
 
-    FOVUtils utils;
+    public FOVUtils utils;
     private Action state = null;
     private Action backgroundState = null;
     private LinkedList<Action> aq;
@@ -51,11 +54,6 @@ public class EVController extends CarController {
 
         pv.update(getView());
 
-        int kuy;
-        if ((kuy = pv.fillDeadEnd(new Coordinate(getPosition()), getViewSquare())) > 0) {
-            logger.info("Filled in {} dead ends.", kuy);
-        }
-
         Action toDo = null;
         toDo = backgroundState;
 
@@ -65,7 +63,7 @@ public class EVController extends CarController {
             // fill dead end only if we are not working on a specific task and just following wall
             int kuy;
             if ((kuy = pv.fillDeadEnd(new Coordinate(getPosition()), getViewSquare())) > 0) {
-                System.out.printf("Filled in %d dead ends.%n", kuy);
+                logger.info("Filled in {} dead ends.", kuy);
             }
 
             FOVUtils.DeadEnd de;
