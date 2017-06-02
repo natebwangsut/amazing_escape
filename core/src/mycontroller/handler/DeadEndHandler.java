@@ -8,6 +8,7 @@ package mycontroller.handler;
 import controller.CarController;
 import mycontroller.actions.Action;
 import mycontroller.FOVUtils;
+import mycontroller.actions.EfficientUTurnAction;
 import mycontroller.actions.UTurnAction;
 import tiles.MapTile;
 import utilities.Coordinate;
@@ -37,7 +38,7 @@ public class DeadEndHandler {
         } else {
             // fuck you
         }
-        return new ThreePointTurnAction(controller, view, deadEnd);
+        return new EfficientUTurnAction(controller, view, deadEnd);
     }
 
     public void uTurn() {

@@ -76,10 +76,12 @@ public class FOVUtils {
             WorldSpatial.Direction dir,
             WorldSpatial.RelativeDirection rdir) {
         ArrayList<WorldSpatial.Direction> dirs = new ArrayList<>(4);
+
         dirs.add(WorldSpatial.Direction.NORTH);
         dirs.add(WorldSpatial.Direction.EAST);
         dirs.add(WorldSpatial.Direction.SOUTH);
         dirs.add(WorldSpatial.Direction.WEST);
+
         int i = dirs.indexOf(dir);
         if (rdir == WorldSpatial.RelativeDirection.LEFT) {
             i--;
