@@ -62,12 +62,14 @@ public class PersistentView {
         // repeat for all directions
         directional:
         for (WorldSpatial.Direction dir : WorldSpatial.Direction.values()) {
+
             /*
             DED Algorithm: X = wall (real and virtual), R = road, ? = any
 
             width=1     width=2     width=3
             ? X ?       ? X X ?     ? X X X ?
             X R X       X R R X     X R R R X
+
             replace the road R here with a virtual wall ^ so above becomes:
             ? X ?       ? X X ?     ? X X X ?
             X X X       X X X X     X X X X X
@@ -82,8 +84,8 @@ public class PersistentView {
             variable names
             ?       c2      ?
             cLeft   c1      c1 at last iteration
-
              */
+
             Coordinate cLeft = FOVUtils.directionalCoordinateAdd(start, new Coordinate(-1, 0), dir);
             Property left = get(cLeft);
             if (left == null || !left.logicalWall) continue directional;

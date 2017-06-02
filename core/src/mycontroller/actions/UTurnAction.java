@@ -13,19 +13,22 @@ import java.util.Map;
  */
 public class UTurnAction extends DeadEndAction {
 
+    private WorldSpatial.Direction target;
+
+    private enum Phase {
+        BRAKING,
+        TURNING,
+        ACCELERATING,
+        COMPLETED
+    }
+
+    private Phase phase = Phase.BRAKING;
+
     public UTurnAction(CarController con, Map<Coordinate, MapTile> view, FOVUtils.DeadEnd de){
         super(con,view,de);
         target = FOVUtils.directionalAdd(con.getOrientation(), WorldSpatial.RelativeDirection.LEFT);
         target = FOVUtils.directionalAdd(target, WorldSpatial.RelativeDirection.LEFT);
     }
-
-    private enum Phase {
-        BRAKING, TURNING, ACCELERATING, COMPLETED
-    };
-
-    private Phase phase = Phase.BRAKING;
-
-    WorldSpatial.Direction target;
 
     @Override
     public void update(float delta) {

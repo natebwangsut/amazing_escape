@@ -6,6 +6,7 @@ package mycontroller.actions;
  */
 
 public interface IAction {
+
     boolean isCompleted();
 
     void update(float delta);
