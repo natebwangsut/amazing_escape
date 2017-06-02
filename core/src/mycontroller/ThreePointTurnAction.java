@@ -2,6 +2,7 @@ package mycontroller;
 
 import com.badlogic.gdx.math.Vector2;
 import controller.CarController;
+import mycontroller.actions.DeadEndAction;
 import tiles.MapTile;
 import utilities.Coordinate;
 import world.WorldSpatial;

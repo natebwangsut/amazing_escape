@@ -15,7 +15,7 @@ public abstract class DeadEndAction extends Action {
     protected final FOVUtils.DeadEnd deadEnd;
     protected final Map<Coordinate, MapTile> view;
 
-    DeadEndAction(CarController con, Map<Coordinate, MapTile> view, FOVUtils.DeadEnd de){
+    protected DeadEndAction(CarController con, Map<Coordinate, MapTile> view, FOVUtils.DeadEnd de) {
         super(con);
         this.deadEnd = de;
         this.view = view;

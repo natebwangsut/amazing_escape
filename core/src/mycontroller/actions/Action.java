@@ -1,6 +1,8 @@
 package mycontroller.actions;
 
 import controller.CarController;
+import mycontroller.EVController;
+import mycontroller.FOVUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import world.WorldSpatial;

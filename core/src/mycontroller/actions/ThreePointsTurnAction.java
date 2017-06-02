@@ -26,7 +26,7 @@ public class ThreePointsTurnAction extends DeadEndAction {
 
     private Phase phase = Phase.BRAKING;
 
-    ThreePointsTurnAction(CarController con, Map<Coordinate, MapTile> view, FOVUtils.DeadEnd de){
+    public ThreePointsTurnAction(CarController con, Map<Coordinate, MapTile> view, FOVUtils.DeadEnd de) {
         super(con, view, de);
         target = FOVUtils.directionalAdd(con.getOrientation(), WorldSpatial.RelativeDirection.LEFT);
         target = FOVUtils.directionalAdd(target, WorldSpatial.RelativeDirection.LEFT);

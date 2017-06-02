@@ -9,6 +9,6 @@ import java.util.Map;
 /**
  * Created by Kolatat on 23/5/17.
  */
-public interface IActionHandler {
+public interface IHandler {
     Action getAction(Map<Coordinate, MapTile> view);
 }

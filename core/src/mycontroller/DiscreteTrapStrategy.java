@@ -3,7 +3,7 @@ package mycontroller;
 import controller.CarController;
 import mycontroller.actions.Action;
 import mycontroller.actions.FollowAction;
-import mycontroller.handler.IActionHandler;
+import mycontroller.handler.IHandler;
 import mycontroller.handler.TrapHandler;
 import tiles.*;
 import utilities.Coordinate;
@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by Kolatat on 23/5/17.
  */
-public class DiscreteTrapStrategy implements IActionHandler {
+public class DiscreteTrapStrategy implements IHandler {
 
     CarController con;
 

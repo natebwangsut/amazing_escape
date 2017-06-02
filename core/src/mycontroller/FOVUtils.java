@@ -186,7 +186,7 @@ public class FOVUtils {
         de.right = rightWall;
         de.origin = new Coordinate(con.getPosition());
         // turn to the side with larger space
-        if(leftWall > rightWall){
+        if(leftWall > rightWall) {
             de.recommendedTurn = WorldSpatial.RelativeDirection.LEFT;
             de.turnSize = de.left;
         } else {

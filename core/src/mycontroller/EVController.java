@@ -4,7 +4,7 @@ import controller.CarController;
 import mycontroller.actions.Action;
 import mycontroller.actions.FollowAction;
 import mycontroller.handler.DeadEndHandler;
-import mycontroller.handler.IActionHandler;
+import mycontroller.handler.IHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import utilities.Coordinate;
@@ -21,7 +21,7 @@ public class EVController extends CarController {
     private Action backgroundState = null;
     private LinkedList<Action> aq;
     private DeadEndHandler deh;
-    private IActionHandler th;
+    private IHandler th;
     private PersistentView pv;
 
     /**

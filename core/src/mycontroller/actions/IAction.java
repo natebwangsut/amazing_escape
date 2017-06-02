@@ -7,7 +7,9 @@ package mycontroller.actions;
 
 public interface IAction {
 
+    // TODO: Comments
     boolean isCompleted();
 
+    // TODO: Comments
     void update(float delta);
 }

@@ -24,7 +24,7 @@ public class UTurnAction extends DeadEndAction {
 
     private Phase phase = Phase.BRAKING;
 
-    public UTurnAction(CarController con, Map<Coordinate, MapTile> view, FOVUtils.DeadEnd de){
+    public UTurnAction(CarController con, Map<Coordinate, MapTile> view, FOVUtils.DeadEnd de) {
         super(con,view,de);
         target = FOVUtils.directionalAdd(con.getOrientation(), WorldSpatial.RelativeDirection.LEFT);
         target = FOVUtils.directionalAdd(target, WorldSpatial.RelativeDirection.LEFT);
@@ -33,7 +33,7 @@ public class UTurnAction extends DeadEndAction {
     @Override
     public void update(float delta) {
         super.update(delta);
-        switch(phase){
+        switch(phase) {
             case BRAKING:
                 controller.applyReverseAcceleration();
                 if(controller.getVelocity() < 0.7) phase = Phase.TURNING;

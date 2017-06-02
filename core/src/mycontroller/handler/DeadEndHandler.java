@@ -9,18 +9,24 @@ import controller.CarController;
 import mycontroller.actions.Action;
 import mycontroller.FOVUtils;
 import mycontroller.actions.EfficientUTurnAction;
+import mycontroller.actions.ThreePointsTurnAction;
 import mycontroller.actions.UTurnAction;
 import tiles.MapTile;
 import utilities.Coordinate;
 
 import java.util.Map;
 
-public class DeadEndHandler {
+public class DeadEndHandler implements IHandler {
 
     private CarController controller;
 
     public DeadEndHandler(CarController controller) {
         this.controller = controller;
+    }
+
+    public Action getAction(Map<Coordinate, MapTile> view) {
+        // When handling deadends, only view is not enough
+        return null;
     }
 
     public Action getAction(Map<Coordinate, MapTile> view, FOVUtils.DeadEnd deadEnd) {
@@ -33,24 +39,14 @@ public class DeadEndHandler {
             // u-turn
         } else if (size == 2) {
             // 3pt
+            // return new ThreePointsTurnAction(controller, view, deadEnd);
         } else if (size == 1) {
             // reverse
+            // return new ReverseAction(controller, view, deadEnd);
         } else {
             // fuck you
+            // holy sheeeeeeeeeeeet
         }
         return new EfficientUTurnAction(controller, view, deadEnd);
     }
-
-    public void uTurn() {
-        // TODO stub
-    }
-
-    public void threePointTurn() {
-        // TODO stub
-    }
-
-    public void reverseOut() {
-        // TODO stub
-    }
-
 }
