@@ -74,11 +74,11 @@ public class DeadEndHandler implements IHandler {
             // nothing to see here ...
         }
 
-        // if we reach here then we are in a 0-width dead end and also in deep shit
+        // if we reach here then we are in a 0-width dead end and also in deep ****
         // could be due to detecting logical walls as real wall
         // so we will use a more basic follow wall action following only physical
         // wall, completing when delta > xxx
-        LogManager.getLogger().warn("In deep shit.");
+        LogManager.getLogger().warn("In deep ****.");
         return new FollowAction(controller, c->FOVUtils.IS_WALL.test(view.get(c))){
 
             {
