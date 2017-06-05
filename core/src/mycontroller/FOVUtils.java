@@ -235,7 +235,7 @@ public class FOVUtils {
         for (int i = 0; i <= wallSensitivity; i++) {
             Coordinate nc = relativeAdd(i, 0, con.getOrientation());
             if (wantTile.test(view.get(nc))) {
-                logger.info("Found wanted Tile");
+                //logger.info("Found wanted Tile");
 
                 return true;
             }
