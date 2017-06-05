@@ -19,6 +19,22 @@ import world.Car;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+/**
+ * [SWEN30006] Software Modelling and Design
+ * Semester 1, 2017
+ * Project Part C - amazing-escape
+ *
+ * Group 107:
+ * Nate Wangsutthitham [755399]
+ * Kolatat Thangkasemvathana [780631]
+ * Khai Mei Chin [755332]
+ *
+ * Main controller of the car
+ * EVController - Electric Vehicle Controller.
+ * 2k17, cars can drive itself to avoid traps and deadends.
+ *
+ * The controller use Action based movement where Action is a representation of a set of movements.
+ */
 public class EVController extends CarController {
 
     private static Logger logger = LogManager.getLogger();
@@ -56,10 +72,13 @@ public class EVController extends CarController {
         });
     }
 
+
+    /**
+     * Update the position based on the
+     * @param delta
+     */
     @Override
     public void update(float delta) {
-      //  System.out.println("Current speed is: " + getVelocity());
-
         pv.update(getView());
 
         Action toDo = null;
@@ -96,6 +115,12 @@ public class EVController extends CarController {
             toDo.update(delta);
     }
 
+
+    /**
+     * Get the coordinate position of the current car
+     *
+     * @return      car's coordinate
+     */
     public Coordinate getCoordinate() {
         String coordinates = getPosition();
         Scanner scanner = new Scanner(coordinates);

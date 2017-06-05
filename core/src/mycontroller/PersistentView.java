@@ -13,7 +13,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Kolatat on 1/6/17.
+ * [SWEN30006] Software Modelling and Design
+ * Semester 1, 2017
+ * Project Part C - amazing-escape
+ *
+ * Group 107:
+ * Nate Wangsutthitham [755399]
+ * Kolatat Thangkasemvathana [780631]
+ * Khai Mei Chin [755332]
+ *
+ * Handling the car's view
  */
 public class PersistentView {
 
@@ -23,6 +32,25 @@ public class PersistentView {
     final FOVUtils utils;
     protected Map<Coordinate, Property> masterView = new HashMap<>();
 
+    private static final int    MAX_DE_GAP_SIZE     = 3;
+    private static final float  R2_DONT_MESS        = 4;
+
+
+    /**
+     * Sub class to provide property of the view.
+     */
+    public static class Property {
+        MapTile tile;
+        Coordinate coordinate;
+        boolean logicalWall;
+    }
+
+
+    /**
+     * PersistentView constructor
+     *
+     * @param con
+     */
     public PersistentView(CarController con) {
         this.con = con;
         if (con instanceof EVController) {
@@ -32,6 +60,11 @@ public class PersistentView {
         }
     }
 
+
+    /**
+     * Update the view based on the given map
+     * @param view
+     */
     public void update(Map<Coordinate, MapTile> view) {
         for (Map.Entry<Coordinate, MapTile> e : view.entrySet()) {
             // skip tiles we already know
@@ -41,22 +74,22 @@ public class PersistentView {
             p.tile = e.getValue();
             p.coordinate = e.getKey();
             // condition for our tile to be considered a logical wall
-                // if LavaTrap and MudTrap tiles are added as 'logical walls', the car may get stuck; not have any path to go through
+            // if LavaTrap and MudTrap tiles are added as 'logical walls', the car may get stuck; not have any path to go through
             p.logicalWall = FOVUtils.IS_WALL.test(e.getValue());// || e.getValue() instanceof LavaTrap || e.getValue() instanceof MudTrap;
 
             masterView.put(e.getKey(), p);
         }
     }
 
-    private static final int MAX_DE_GAP_SIZE = 3;
-    private static final float R2_DONT_MESS = 4;
 
-    /*
+    /**
      * Detects dead-ends and replace them with logical walls.
      *
-     * @return number of dead-ends replaced
+     * @param start         coordinate of the starting detection coordinate
+     * @return              number of dead ends found
      */
-    protected int detectDeadEnd(Coordinate start) {
+    private int detectDeadEnd(Coordinate start) {
+
         int dec = 0; // dead end count
         Coordinate car = new Coordinate(con.getPosition());
 
@@ -115,6 +148,7 @@ public class PersistentView {
                 continue directional;
             }
 
+            // check if in range
             if (i > 0 && i <= MAX_DE_GAP_SIZE) {
                 logger.info("Filling ");
                 for (int j = 0; j < i; j++) {
@@ -130,6 +164,14 @@ public class PersistentView {
         return dec;
     }
 
+
+    /**
+     * Can the deadend be fill ?
+     *
+     * @param cen
+     * @param limit
+     * @return
+     */
     public int fillDeadEnd(Coordinate cen, int limit) {
         // I will not fill dead ends when car is currently in a virtual wall
         Property p = get(new Coordinate(con.getPosition()));
@@ -153,13 +195,14 @@ public class PersistentView {
         return totalDef;
     }
 
+
+    /**
+     * Return the property given the coordinate
+     *
+     * @param c     coordinate to show the property
+     * @return      property
+     */
     public Property get(Coordinate c) {
         return masterView.get(c);
-    }
-
-    public static class Property {
-        MapTile tile;
-        Coordinate coordinate;
-        boolean logicalWall;
     }
 }

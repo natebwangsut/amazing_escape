@@ -14,7 +14,16 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
- * Created by Kolatat on 23/5/17.
+ * [SWEN30006] Software Modelling and Design
+ * Semester 1, 2017
+ * Project Part C - amazing-escape
+ *
+ * Group 107:
+ * Nate Wangsutthitham [755399]
+ * Kolatat Thangkasemvathana [780631]
+ * Khai Mei Chin [755332]
+ *
+ * Handling the car's FOV
  */
 public class FOVUtils {
 
@@ -24,14 +33,33 @@ public class FOVUtils {
     private final CarController con;
     private int wallSensitivity = 2;
 
+
+    /**
+     * FOVUtils Constructor
+     *
+     * @param con
+     */
     public FOVUtils(CarController con) {
         this.con = con;
     }
+
+
+    public class DeadEnd {
+        Coordinate origin;
+        WorldSpatial.Direction direction;
+        int ahead;
+        int left;
+        int right;
+        public WorldSpatial.RelativeDirection recommendedTurn;
+        public int turnSize;
+    }
+
 
     public static int getDeadEndSize(Map<Coordinate, MapTile> view) {
         // TODO
         return -1;
     }
+
 
     public static Coordinate getCenter(Map<Coordinate, MapTile> view) {
         if (view.isEmpty()) return null;
@@ -121,15 +149,6 @@ public class FOVUtils {
         return new Coordinate(u.x + dx, u.y + dy);
     }
 
-    public class DeadEnd {
-        Coordinate origin;
-        WorldSpatial.Direction direction;
-        int ahead;
-        int left;
-        int right;
-        public WorldSpatial.RelativeDirection recommendedTurn;
-        public int turnSize;
-    }
 
     public DeadEnd deadEndAhead(PersistentView view) {
         // number of tiles till wall in front
@@ -203,7 +222,7 @@ public class FOVUtils {
                 Coordinate nc = relativeAdd(i, j, con.getOrientation());
                 if (wantTile.test(view.get(nc))) {
                     logger.info("Found TrapTile at {}", nc);
-                    
+
                     return true;
                 }
             }
