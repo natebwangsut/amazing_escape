@@ -40,7 +40,6 @@ public class ThreePointTurnAction extends DeadEndAction {
     }
 
     private Phase phase = Phase.DECELERATE;
-    private static final float T_THRESHOLD = 10;
 
 
     /**
@@ -74,47 +73,6 @@ public class ThreePointTurnAction extends DeadEndAction {
         target3 = normaliseAngle(target3);
         //logger.info("Target 1: {}, Target 2: {}, Target 3: {}", target1, target2, target3);
     }
-
-
-    /**
-     * Check the angle between two values
-     * @param t1
-     * @param t2
-     * @param threshold
-     * @return
-     */
-    private static boolean isAngleSimilar(float t1, float t2, float threshold) {
-        float diff = normaliseAngle(t1 - t2);
-        if (diff > 180) diff = 360 - diff;
-        // now we have a range of 0..180 where 0 means t1 close to t2
-        return diff <= threshold;
-    }
-
-
-    /**
-     * Normallise angle to [0, 360) range
-     *
-     * @param theta
-     * @return
-     */
-    private static float normaliseAngle(float theta) {
-        while (theta < 0) theta += 360;
-        return theta % 360;
-    }
-
-
-    /**
-     * Check if reversing or not
-     *
-     * @return
-     */
-    private boolean isReversing() {
-        // reversing if velocity vector opposite angle
-        float car = controller.getAngle();
-        float vel = controller.getRawVelocity().angle();
-        return isAngleSimilar(car, vel + 180, T_THRESHOLD);
-    }
-
 
     /**
      * Set the phase
@@ -155,7 +113,7 @@ public class ThreePointTurnAction extends DeadEndAction {
                     applyRightTurn(incomingDir, delta);
 
                // logger.info("Current angle: {}", controller.getAngle());
-                if (isAngleSimilar(controller.getAngle(), target1, T_THRESHOLD))
+                if (isAngleSimilar(controller.getAngle(), target1, ANGLE_THRESHOLD))
                     setPhase(Phase.POINT1_B);
                 break;
 
@@ -176,7 +134,7 @@ public class ThreePointTurnAction extends DeadEndAction {
                     controller.applyReverseAcceleration();
 
                 //logger.info("Current angle: {}", controller.getAngle());
-                if (isAngleSimilar(controller.getAngle(), target2, T_THRESHOLD))
+                if (isAngleSimilar(controller.getAngle(), target2, ANGLE_THRESHOLD))
                     setPhase(Phase.POINT2_B);
                 break;
 
@@ -196,7 +154,7 @@ public class ThreePointTurnAction extends DeadEndAction {
                     controller.applyForwardAcceleration();
 
                // logger.info("Current angle: {}", controller.getAngle());
-                if (isAngleSimilar(controller.getAngle(), target3, T_THRESHOLD))
+                if (isAngleSimilar(controller.getAngle(), target3, ANGLE_THRESHOLD))
                     setPhase(Phase.ACCELERATION);
                 break;
 

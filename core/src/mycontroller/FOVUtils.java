@@ -29,9 +29,9 @@ public class FOVUtils {
 
     private static Logger logger = LogManager.getLogger();
 
-    public static final Predicate<MapTile> IS_WALL = t -> t.getName().equals("Wall");
+    public static final Predicate<MapTile> IS_WALL = t -> t!=null && t.getName().equals("Wall");
     private final CarController con;
-    private int wallSensitivity = 2;
+    private static final int wallSensitivity = 2;
 
 
     /**
@@ -54,50 +54,10 @@ public class FOVUtils {
         public int turnSize;
     }
 
-
-    public static int getDeadEndSize(Map<Coordinate, MapTile> view) {
-        // TODO
-        return -1;
-    }
-
-
-    public static Coordinate getCenter(Map<Coordinate, MapTile> view) {
-        if (view.isEmpty()) return null;
-        Coordinate center = new Coordinate(0, 0);
-        // center is the average of all coordinates?
-        // would be incorrect at edges of maps...
-        view.entrySet().stream().forEach(e -> {
-            center.x += e.getKey().x;
-            center.y += e.getKey().y;
-        });
-        center.x /= view.size();
-        center.y /= view.size();
-        return center;
-    }
-
     public static double dist2(Coordinate u, Coordinate v) {
         double dx = u.x - v.x;
         double dy = u.y - v.y;
         return dx * dx + dy * dy;
-    }
-
-    public static double dist(Coordinate u, Coordinate v) {
-        return Math.sqrt(dist2(u, v));
-    }
-
-    public static <T extends MapTile> MapEntry<T> getClosest(Map<Coordinate, MapTile> view, Class<T> type) {
-        Coordinate center = getCenter(view);
-        Optional<Map.Entry<Coordinate, MapTile>> candidate = view.entrySet().stream()
-                // select only specified tile type
-                .filter(e -> type.isInstance(e.getValue()))
-                // finds the closest one to center
-                .min(Comparator.comparingDouble(e -> dist2(center, e.getKey())));
-        if (candidate.isPresent()) {
-//            return new MapEntry<T>(candidate.get().getKey(), candidate.get().getValue());
-            return null;
-        } else {
-            return null;
-        }
     }
 
     public static WorldSpatial.Direction directionalAdd(
@@ -197,7 +157,7 @@ public class FOVUtils {
             if (!(foundLeft && foundRight)) return null;
         }
         if (rightWall>=3) return null; // big enough room to turn so no
-        logger.info("Found dead end at {} at {} in front having L-R: {}-{}", con.getPosition(), frontWall, -leftWall, rightWall);
+        logger.info("Found dead end at {} at {} in front having L-R: {}-{}", con.getPosition(), frontWall, leftWall, rightWall);
         DeadEnd de = new DeadEnd();
         de.ahead = frontWall;
         de.direction = con.getOrientation();
@@ -263,24 +223,6 @@ public class FOVUtils {
 
     public Coordinate relativeAdd(int x, int y, WorldSpatial.Direction dir) {
         return directionalCoordinateAdd(new Coordinate(con.getPosition()), new Coordinate(x, y), dir);
-    }
-
-    public static class MapEntry<T extends MapTile> {
-        private final Coordinate coord;
-        private final T tile;
-
-        private MapEntry(Coordinate coord, T tile) {
-            this.coord = coord;
-            this.tile = tile;
-        }
-
-        public Coordinate getCoordinate() {
-            return coord;
-        }
-
-        public T getTile() {
-            return tile;
-        }
     }
 
 }

@@ -40,7 +40,6 @@ public class EVController extends CarController {
     public FOVUtils utils;
     private Action state = null;
     private Action backgroundState = null;
-    private LinkedList<Action> aq;
     private DeadEndHandler deh;
     private DiscreteTrapStrategy th;
     private PersistentView pv;
@@ -58,9 +57,6 @@ public class EVController extends CarController {
 
         deh = new DeadEndHandler(this);
         th = new DiscreteTrapStrategy(this);
-
-        aq = new LinkedList<>();
-        this.aq.add(this.backgroundState);
 
         pv = new PersistentView(this);
         backgroundState = new FollowAction(this, c -> {
@@ -80,42 +76,36 @@ public class EVController extends CarController {
 
         pv.update(getView());
 
-        Action toDo = null;
-        toDo = backgroundState;
-
         if (state == null || state.isCompleted()) {
             state = null;
 
             // fill dead end only if we are not working on a specific task and just following wall
-            int kuy;
-            if ((kuy = pv.fillDeadEnd(new Coordinate(getPosition()), getViewSquare())) > 0) {
-                logger.info("Filled in {} dead ends.", kuy);
+            int numDe;
+            if ((numDe = pv.fillDeadEnd(new Coordinate(getPosition()), getViewSquare())) > 0) {
+                logger.info("Filled in {} dead ends.", numDe);
             }
 
             FOVUtils.DeadEnd de;
             if ((de=utils.deadEndAhead(pv))!=null) {
-                toDo = state = deh.getAction(getView(),de);
-                Coordinate c = getCoordinate();
+                state = deh.getAction(getView(),de);
+                /*Coordinate c = getCoordinate();
                 if(pv.get(c).tile instanceof LavaTrap && pv.get(c).logicalWall){
-                    toDo = state = new ReverseOutAction(this, getView(), null);
-                }
+                    state = new ReverseOutAction(this, getView(), null);
+                }*/
             } else /*if (getView().get(getCoordinate()) instanceof MudTrap) {
-                toDo = state = th.getAction(getView(), "MudTrap");
+                to Do = state = th.getAction(getView(), "MudTrap");
 
             } else */if (getView().get(getCoordinate()) instanceof GrassTrap){
-                toDo = state = th.getAction(getView(), "GrassTrap");
-            } else  {
-                toDo = backgroundState;
+                state = th.getAction(getView(), "GrassTrap");
             }
 
-        } else {
-            // Use the previous instruction
-            toDo = state;
         }
 
-        // Not doing anything if null
-        if (toDo != null)
-            toDo.update(delta);
+        if (state == null) {
+            backgroundState.update(delta);
+        } else {
+            state.update(delta);
+        }
     }
 
 
@@ -125,12 +115,6 @@ public class EVController extends CarController {
      * @return      car's coordinate
      */
     public Coordinate getCoordinate(){
-        String coordinates = getPosition();
-        Scanner scanner = new Scanner(coordinates);
-        scanner.useDelimiter(",");
-        int x = scanner.nextInt();
-        int y = scanner.nextInt();
-        scanner.close();
-        return new Coordinate(x,y);
+        return new Coordinate(getPosition());
     }
 }

@@ -22,7 +22,7 @@ import java.util.function.Predicate;
 public class FollowAction extends Action {
 
     protected final Predicate<Coordinate> tile;
-    boolean following = false;
+    protected boolean following = false;
 
 
     /**
@@ -35,6 +35,8 @@ public class FollowAction extends Action {
         super(controller);
         this.tile = tile;
     }
+
+    protected boolean doInit = true;
 
 
     /**
@@ -56,7 +58,7 @@ public class FollowAction extends Action {
         
 
         // If you are not following a wall initially, find a wall to stick to!
-        if (!following) {
+        if (!following && doInit) {
             if (controller.getVelocity() < CAR_SPEED) {
                 controller.applyForwardAcceleration();
             }

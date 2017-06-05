@@ -1,11 +1,9 @@
 package mycontroller.handler;
 
 import controller.CarController;
-import mycontroller.actions.Action;
+import mycontroller.actions.*;
 import mycontroller.FOVUtils;
-import mycontroller.actions.EfficientUTurnAction;
-import mycontroller.actions.ReverseOutAction;
-import mycontroller.actions.ThreePointTurnAction;
+import org.apache.logging.log4j.LogManager;
 import tiles.MapTile;
 import utilities.Coordinate;
 
@@ -75,7 +73,40 @@ public class DeadEndHandler implements IHandler {
 
             // nothing to see here ...
         }
-        return new ThreePointTurnAction(controller, view, deadEnd);
+
+        // if we reach here then we are in a 0-width dead end and also in deep shit
+        // could be due to detecting logical walls as real wall
+        // so we will use a more basic follow wall action following only physical
+        // wall, completing when delta > xxx
+        LogManager.getLogger().warn("In deep shit.");
+        return new FollowAction(controller, c->FOVUtils.IS_WALL.test(view.get(c))){
+
+            {
+                doInit = false;
+            }
+
+            float sumDelta = 0;
+
+            @Override
+            public void update(float delta) {
+                sumDelta+=delta;
+
+                if(!following){
+                    if(controller.getVelocity()<CAR_SPEED){
+                        controller.applyForwardAcceleration();
+                    }
+                    if(utils.checkAhead(tile)) following=true;
+                }
+                super.update(delta);
+
+            }
+
+            @Override
+            public boolean isCompleted() {
+                logger.info("basic wall delta={}", sumDelta);
+                return sumDelta>0.5;
+            }
+        };
     }
 
 
