@@ -1,10 +1,5 @@
 package mycontroller.handler;
 
-/*
- * Nate Bhurinat W. (@natebwangsut | nate.bwangsut@gmail.com)
- * https://github.com/natebwangsut
- */
-
 import controller.CarController;
 import mycontroller.actions.Action;
 import mycontroller.FOVUtils;
@@ -16,23 +11,52 @@ import utilities.Coordinate;
 
 import java.util.Map;
 
+/**
+ * [SWEN30006] Software Modelling and Design
+ * Semester 1, 2017
+ * Project Part C - amazing-escape
+ *
+ * Group 107:
+ * Nate Wangsutthitham          [755399]
+ * Kolatat Thangkasemvathana    [780631]
+ * Khai Mei Chin                [755332]
+ *
+ * Handle deadends
+ */
 public class DeadEndHandler implements IHandler {
 
     private CarController controller;
 
+
+    /**
+     * Constructor
+     *
+     * @param controller
+     */
     public DeadEndHandler(CarController controller) {
         this.controller = controller;
     }
 
-    public Action getAction(Map<Coordinate, MapTile> view) {
-        // When handling deadends, only view is not enough
-        return null;
-    }
 
+    /**
+     * Return Action to deal with current deadend
+     *
+     * @param view
+     * @param deadEnd
+     * @return
+     */
     public Action getAction(Map<Coordinate, MapTile> view, FOVUtils.DeadEnd deadEnd) {
         return getActionBasedOnSize(view, deadEnd);
     }
 
+
+    /**
+     * Tell which Action to take for the size given.
+     *
+     * @param view
+     * @param deadEnd
+     * @return
+     */
     private Action getActionBasedOnSize(Map<Coordinate, MapTile> view, FOVUtils.DeadEnd deadEnd) {
         int size = deadEnd.turnSize;
         System.out.println("Size of dead end is: "+size);
@@ -52,4 +76,17 @@ public class DeadEndHandler implements IHandler {
         }
         return new ThreePointTurnAction(controller, view, deadEnd);
     }
+
+
+    /**
+     * Required by IHandler
+     *
+     * @param view
+     * @return
+     */
+    public Action getAction(Map<Coordinate, MapTile> view) {
+        // When handling deadends, only view is not enough
+        return null;
+    }
+
 }

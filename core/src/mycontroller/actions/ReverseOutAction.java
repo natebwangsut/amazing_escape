@@ -2,7 +2,6 @@ package mycontroller.actions;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 import controller.CarController;
 import mycontroller.EVController;

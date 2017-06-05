@@ -1,9 +1,7 @@
 package mycontroller.actions;
 
-import com.badlogic.gdx.math.Vector2;
 import controller.CarController;
 import mycontroller.FOVUtils;
-import mycontroller.actions.DeadEndAction;
 import tiles.MapTile;
 import utilities.Coordinate;
 import world.WorldSpatial;
@@ -11,7 +9,19 @@ import world.WorldSpatial;
 import java.util.Map;
 
 /**
- * Created by Kolatat on 2/6/17.
+ * [SWEN30006] Software Modelling and Design
+ * Semester 1, 2017
+ * Project Part C - amazing-escape
+ *
+ * Group 107:
+ * Nate Wangsutthitham          [755399]
+ * Kolatat Thangkasemvathana    [780631]
+ * Khai Mei Chin                [755332]
+ *
+ * ThreePointTurn Action
+ * Action to do a uturn with limited space.
+ *
+ * Advanced technique for driver.
  */
 public class ThreePointTurnAction extends DeadEndAction {
 

@@ -2,15 +2,13 @@ package mycontroller.actions;
 
 import controller.CarController;
 import mycontroller.EVController;
-import mycontroller.FOVUtils;
-import tiles.*;
+import tiles.GrassTrap;
+import tiles.MapTile;
+import tiles.TrapTile;
 import utilities.Coordinate;
-import world.WorldSpatial;
 import world.WorldSpatial.Direction;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.function.Predicate;
 
 /**

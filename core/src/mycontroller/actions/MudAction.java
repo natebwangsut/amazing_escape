@@ -2,14 +2,11 @@ package mycontroller.actions;
 
 import controller.CarController;
 import mycontroller.EVController;
-import mycontroller.FOVUtils;
-import tiles.GrassTrap;
 import tiles.MapTile;
 import tiles.MudTrap;
 import utilities.Coordinate;
 
 import java.util.Map;
-import java.util.Scanner;
 
 /**
  * [SWEN30006] Software Modelling and Design
