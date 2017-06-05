@@ -164,11 +164,11 @@ public class GrassAction extends Action {
                 else
                     snapTo = Direction.SOUTH;
 
-                // Moving out
+                // Reversing out
                 if (controller.getView().get(currentCoordinate) instanceof GrassTrap)
                     controller.applyReverseAcceleration();
 
-                // Passed the trap
+                // Reversed out of grass
                 if (!(controller.getView().get(currentCoordinate) instanceof GrassTrap))
                     setPhase(Phase.REVERSE_OUT);
 
@@ -188,15 +188,20 @@ public class GrassAction extends Action {
                         applyLeftTurn(controller.getOrientation(), delta);
                     else
                         applyRightTurn(controller.getOrientation(), delta);
-                else
+
+                // Back into the grass we go
+                if ((controller.getView().get(currentCoordinate) instanceof GrassTrap))
                     setPhase(Phase.IN_GRASS);
                 break;
+                
 
             case OUT_GRASS:
                 logger.info("Current coordinate is {}", currentCoordinate);
                 // Not in any trap
-                if (!(controller.getView().get(currentCoordinate) instanceof TrapTile))
+                if (!(controller.getView().get(currentCoordinate) instanceof TrapTile)){
                     setPhase(Phase.FINDING_WALL);
+                    break;
+                }
                 else
                     setPhase(Phase.COMPLETED);
                 break;
