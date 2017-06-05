@@ -24,6 +24,7 @@ public abstract class Action implements IAction {
     boolean turningLeft = false;
     boolean turningRight = false;
     WorldSpatial.Direction previousState = null;
+    
     protected Action(CarController controller) {
         this.controller = controller;
         if (controller instanceof EVController) {

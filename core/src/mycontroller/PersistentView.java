@@ -41,7 +41,8 @@ public class PersistentView {
             p.tile = e.getValue();
             p.coordinate = e.getKey();
             // condition for our tile to be considered a logical wall
-            p.logicalWall = FOVUtils.IS_WALL.test(e.getValue()) || e.getValue() instanceof LavaTrap || e.getValue() instanceof MudTrap;
+                // if LavaTrap and MudTrap tiles are added as 'logical walls', the car may get stuck; not have any path to go through
+            p.logicalWall = FOVUtils.IS_WALL.test(e.getValue());// || e.getValue() instanceof LavaTrap || e.getValue() instanceof MudTrap;
 
             masterView.put(e.getKey(), p);
         }

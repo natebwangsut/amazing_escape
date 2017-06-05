@@ -36,13 +36,18 @@ public class ThreePointTurnAction extends DeadEndAction {
         float step = 60; // degrees
         if (de.recommendedTurn == WorldSpatial.RelativeDirection.RIGHT)
             step = -step;
-        target1 = incoming + step;
-        target2 = incoming - step;
-        target3 = incoming + 180;
+        target1 = incoming + step; 
+        target2 = incoming - step;  
+        target3 = incoming + 180;   
 
+        // the angle to turn to is in the opposite direction
+        target2 -= 180;
+        
         target1 = normaliseAngle(target1);
         target2 = normaliseAngle(target2);
         target3 = normaliseAngle(target3);
+        
+        //logger.info("Target 1: {}, Target 2: {}, Target 3: {}", target1, target2, target3);
     }
 
     float incoming, target1, target2, target3;
@@ -63,7 +68,7 @@ public class ThreePointTurnAction extends DeadEndAction {
 
     private void setPhase(Phase p) {
         phase = p;
-        logger.info("Switching phase into {0}", p.name());
+        logger.info("Switching phase into {}", p.name());
     }
 
     @Override
@@ -89,18 +94,21 @@ public class ThreePointTurnAction extends DeadEndAction {
                 } else {
                     applyRightTurn(incomingDir, delta);
                 }
+               // logger.info("Current angle: {}", controller.getAngle());
                 if (isAngleSimilar(controller.getAngle(), target1, T_THRESHOLD))
                     setPhase(Phase.POINT1_B);
                 break;
 
             case POINT1_B:
                 controller.applyReverseAcceleration();
+                
                 if (controller.getVelocity() < 0.1 || isReversing()) {
                     setPhase(Phase.POINT2_R);
                 }
                 break;
 
             case POINT2_R:
+                
                 if (deadEnd.recommendedTurn == WorldSpatial.RelativeDirection.LEFT) {
                     applyLeftTurn(incomingDir, delta);
                 } else {
@@ -108,6 +116,8 @@ public class ThreePointTurnAction extends DeadEndAction {
                 }
                 if (controller.getVelocity()<1)
                     controller.applyReverseAcceleration();
+
+                //logger.info("Current angle: {}", controller.getAngle());
                 if (isAngleSimilar(controller.getAngle(), target2, T_THRESHOLD))
                     setPhase(Phase.POINT2_B);
                 break;
@@ -125,6 +135,8 @@ public class ThreePointTurnAction extends DeadEndAction {
                 }
                 if (controller.getVelocity() < 1)
                     controller.applyForwardAcceleration();
+
+               // logger.info("Current angle: {}", controller.getAngle());
                 if (isAngleSimilar(controller.getAngle(), target3, T_THRESHOLD))
                     phase = Phase.ACCELERATION;
                 break;

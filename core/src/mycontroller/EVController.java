@@ -4,13 +4,20 @@ import controller.CarController;
 import mycontroller.actions.Action;
 import mycontroller.actions.FollowAction;
 import mycontroller.handler.DeadEndHandler;
+import mycontroller.handler.DiscreteTrapStrategy;
 import mycontroller.handler.IHandler;
+import tiles.GrassTrap;
+import tiles.LavaTrap;
+import tiles.MudTrap;
+import tiles.TrapTile;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import utilities.Coordinate;
 import world.Car;
 
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class EVController extends CarController {
 
@@ -21,7 +28,7 @@ public class EVController extends CarController {
     private Action backgroundState = null;
     private LinkedList<Action> aq;
     private DeadEndHandler deh;
-    private IHandler th;
+    private DiscreteTrapStrategy th;
     private PersistentView pv;
 
     /**
@@ -51,6 +58,7 @@ public class EVController extends CarController {
 
     @Override
     public void update(float delta) {
+      //  System.out.println("Current speed is: " + getVelocity());
 
         pv.update(getView());
 
@@ -69,9 +77,12 @@ public class EVController extends CarController {
             FOVUtils.DeadEnd de;
             if ((de=utils.deadEndAhead(pv))!=null) {
                 toDo = state = deh.getAction(getView(),de);
-            } else /*if (utils.isInVicinity(t->t instanceof TrapTile)) {
-                toDo = state = th.getAction(getView());
-            } else */ {
+            } else if (getView().get(getCoordinate()) instanceof MudTrap) {
+                toDo = state = th.getAction(getView(), "MudTrap");
+                
+            } else if (getView().get(getCoordinate()) instanceof GrassTrap){
+                toDo = state = th.getAction(getView(), "GrassTrap");
+            } else  {
                 toDo = backgroundState;
             }
 
@@ -84,4 +95,15 @@ public class EVController extends CarController {
         if (toDo != null)
             toDo.update(delta);
     }
+    
+    public Coordinate getCoordinate(){
+        String coordinates = getPosition();
+        Scanner scanner = new Scanner(coordinates);
+        scanner.useDelimiter(",");
+        int x = scanner.nextInt();
+        int y = scanner.nextInt();
+        Coordinate coord = new Coordinate(x,y);
+        return coord;
+    }
+    
 }

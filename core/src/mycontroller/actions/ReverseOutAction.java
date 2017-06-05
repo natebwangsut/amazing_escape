@@ -32,15 +32,17 @@ public class ReverseOutAction extends DeadEndAction{
         REVERSING,
         STOP_REVERSE,
         TURNING,
-        TURN_TYPE1,
-        TURN_TYPE2,
-        ACCELERATING,
         COMPLETED
     }
 	
 	private Phase phase = Phase.MOVING;
 	
-	protected ReverseOutAction(CarController con, Map<Coordinate, MapTile> view, FOVUtils.DeadEnd de) {
+	private void setPhase(Phase p) {
+        phase = p;
+        logger.info("Switching phase into {}", p.name());
+    }
+	
+	public ReverseOutAction(CarController con, Map<Coordinate, MapTile> view, FOVUtils.DeadEnd de) {
 		super(con, view ,de);
 		// TODO Auto-generated constructor stub
 		this.completed = false;
@@ -83,7 +85,7 @@ public class ReverseOutAction extends DeadEndAction{
 			if(controller.getVelocity() > 0)
 				controller.applyBrake();
 			else
-				phase = Phase.REVERSING;
+			    setPhase(Phase.REVERSING);
 			break;
 		case REVERSING:
 			if(controller.getVelocity() < REVERSE_SPEED){
@@ -149,29 +151,23 @@ public class ReverseOutAction extends DeadEndAction{
 			if(controller.getVelocity() > 0){
 				controller.applyBrake();
 			} else {
-				if((leftBackSeen && rightBackSeen) || (!leftBackSeen && rightBackSeen)){
-					phase = Phase.TURN_TYPE1;
-				} else {
-					phase = Phase.TURN_TYPE2;
-				}
+				setPhase(Phase.TURNING);
 			}
 			break;
-		case TURN_TYPE1:
+		case TURNING:
 			if(controller.getOrientation() == intoDirection){
-				phase = Phase.COMPLETED;
+				
+			    setPhase(Phase.COMPLETED);
 				
 			}
 			controller.applyForwardAcceleration();
 			applyRightTurn(carDirection, delta);
 			
 			break;
-		case TURN_TYPE2:
-			break;
-				
-		}
 
 		
 			
+		}
 	}
 }
 

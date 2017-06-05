@@ -48,11 +48,13 @@ public class Simulation extends ApplicationAdapter implements InputProcessor {
 
         startTime = System.currentTimeMillis();
         // Define the asset manager
-        // map = new TmxMapLoader().load("easy-map.tmx");
+//         map = new TmxMapLoader().load("easy-map.tmx");
+
+         //map = new TmxMapLoader().load("3point-turn-map.tmx");
         //map = new TmxMapLoader().load("easy-map-traps.tmx");
-        map = new TmxMapLoader().load("lecture-preview.tmx");
-        //map = new TmxMapLoader().load("lecture-preview2.tmx");
-        //map = new TmxMapLoader().load("testRoad.tmx");
+        //map = new TmxMapLoader().load("lecture-preview.tmx");
+        map = new TmxMapLoader().load("lecture-preview2.tmx");
+       // map = new TmxMapLoader().load("testRoad.tmx");
         // map = new TmxMapLoader().load("map.tmx");
         //map = new TmxMapLoader().load("map2.tmx");
 

@@ -23,6 +23,11 @@ public class EfficientUTurnAction extends DeadEndAction {
     }
 
     private Phase phase = Phase.SETUP;
+    
+    private void setPhase(Phase p) {
+        phase = p;
+        logger.info("Switching phase into {}", p.name());
+    }
 
     public EfficientUTurnAction(CarController con, Map<Coordinate, MapTile> view, FOVUtils.DeadEnd de) {
         super(con,view,de);
@@ -38,7 +43,7 @@ public class EfficientUTurnAction extends DeadEndAction {
             case SETUP:
                 controller.applyReverseAcceleration();
                 if (controller.getVelocity() < 1.5)
-                    phase = Phase.TURNING;
+                    setPhase(Phase.TURNING);
                 break;
             //
             case TURNING:
@@ -46,13 +51,13 @@ public class EfficientUTurnAction extends DeadEndAction {
                     controller.applyForwardAcceleration();
                 applyRightTurn(controller.getOrientation(), delta);
                 if (controller.getOrientation() == target)
-                    phase = Phase.ACCELERATING;
+                    setPhase(Phase.ACCELERATING);
                 break;
             //
             case ACCELERATING:
                 controller.applyForwardAcceleration();
                 if (controller.getVelocity() >= CAR_SPEED)
-                    phase = Phase.COMPLETED;
+                    setPhase(Phase.COMPLETED);
                 break;
         }
     }
