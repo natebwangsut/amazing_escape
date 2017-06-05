@@ -13,9 +13,9 @@ import java.util.Map;
  * Project Part C - amazing-escape
  *
  * Group 107:
- * Nate Wangsutthitham [755399]
- * Kolatat Thangkasemvathana [780631]
- * Khai Mei Chin [755332]
+ * Nate Wangsutthitham              [755399]
+ * Kolatat Thangkasemvathana        [780631]
+ * Khai Mei Chin                    [755332]
  *
  * DeadEnd based Action:
  * Action to dealt with deadends if I have detected one.

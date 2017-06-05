@@ -18,9 +18,9 @@ import java.util.Map;
  * Project Part C - amazing-escape
  *
  * Group 107:
- * Nate Wangsutthitham [755399]
- * Kolatat Thangkasemvathana [780631]
- * Khai Mei Chin [755332]
+ * Nate Wangsutthitham          [755399]
+ * Kolatat Thangkasemvathana    [780631]
+ * Khai Mei Chin                [755332]
  *
  * Handling the car's view
  */

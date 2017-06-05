@@ -1,11 +1,9 @@
 package mycontroller.actions;
 
 import controller.CarController;
+import mycontroller.EVController;
 import mycontroller.FOVUtils;
-import tiles.GrassTrap;
-import tiles.LavaTrap;
-import tiles.MapTile;
-import tiles.MudTrap;
+import tiles.*;
 import utilities.Coordinate;
 import world.WorldSpatial;
 import world.WorldSpatial.Direction;
@@ -15,6 +13,18 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
+/**
+ * [SWEN30006] Software Modelling and Design
+ * Semester 1, 2017
+ * Project Part C - amazing-escape
+ *
+ * Group 107:
+ * Nate Wangsutthitham          [755399]
+ * Kolatat Thangkasemvathana    [780631]
+ * Khai Mei Chin                [755332]
+ *
+ * Action to find and stick to the wall.
+ */
 public class GrassAction extends Action {
 
     protected final Map<Coordinate, MapTile> view;
@@ -30,18 +40,6 @@ public class GrassAction extends Action {
     Direction lastTurn = null;
     Direction turnDirectionAfterFoundWall = null;
 
-    private static boolean isAngleSimilar(float t1, float t2, float threshold) {
-        float diff = normaliseAngle(t1 - t2);
-        if (diff > 180) diff = 360 - diff;
-        // now we have a range of 0..180 where 0 means t1 close to t2
-        return diff <= threshold;
-    }
-
-    private static float normaliseAngle(float theta) {
-        while (theta < 0) theta += 360;
-        return theta % 360;
-    }
-
 
     private static final int SNAP_THRESHOLD = 10;
     Direction beforeSnap = null;
@@ -54,17 +52,24 @@ public class GrassAction extends Action {
     private Phase phase = Phase.DETECTED;
 
 
-    public GrassAction(CarController con, Map<Coordinate, MapTile> view) {
-        super(con);
+    /**
+     * Constructor
+     *
+     * @param controller
+     * @param view
+     */
+    public GrassAction(CarController controller, Map<Coordinate, MapTile> view) {
+
+        super(controller);
         this.view = view;
         this.findWallTurn = false;
 
-        if (con.getOrientation() == Direction.NORTH) {
+        if (controller.getOrientation() == Direction.NORTH) {
 
             this.facingLeftDirection = Direction.WEST;
-        } else if (con.getOrientation() == Direction.EAST) {
+        } else if (controller.getOrientation() == Direction.EAST) {
             this.facingLeftDirection = Direction.NORTH;
-        } else if (con.getOrientation() == Direction.SOUTH) {
+        } else if (controller.getOrientation() == Direction.SOUTH) {
             this.facingLeftDirection = Direction.EAST;
         } else {
             this.facingLeftDirection = Direction.SOUTH;
@@ -73,125 +78,157 @@ public class GrassAction extends Action {
         logger.info("New Grass Action");
     }
 
+
+    /**
+     * Check the angle between two values
+     * @param t1
+     * @param t2
+     * @param threshold
+     * @return
+     */
+    private static boolean isAngleSimilar(float t1, float t2, float threshold) {
+        float diff = normaliseAngle(t1 - t2);
+        if (diff > 180) diff = 360 - diff;
+        // now we have a range of 0..180 where 0 means t1 close to t2
+        return diff <= threshold;
+    }
+
+
+    /**
+     * Normallise angle to [0, 360) range
+     *
+     * @param theta
+     * @return
+     */
+    private static float normaliseAngle(float theta) {
+        while (theta < 0) theta += 360;
+        return theta % 360;
+    }
+
+
+
+    /**
+     * Set the phase
+     *
+     * @param p     phase to be set into
+     */
     private void setPhase(Phase p) {
         phase = p;
         logger.info("Switching phase into {}", p.name());
     }
 
+
+    /**
+     * Update the car's movement
+     *
+     * @param delta
+     */
     @Override
     public void update(float delta) {
 
         super.update(delta);
         // current car coordinate
-        String coordinates = controller.getPosition();
-        Scanner scanner = new Scanner(coordinates);
-        scanner.useDelimiter(",");
-        int x = scanner.nextInt();
-        int y = scanner.nextInt();
-        currentCoordinate = new Coordinate(x,y);
-     //   System.out.println("In?: " + currentCoordinate);
+        EVController ev = (EVController) controller;
+        currentCoordinate = ev.getCoordinate();
 
-        System.out.println("Current orientation is: " + controller.getOrientation());
-        System.out.println("Current angle is: " + controller.getAngle());
+        //System.out.println("In?: " + currentCoordinate);
+        logger.info("Current orientation is: {}", controller.getOrientation());
+        logger.info("Current angle is: {}", controller.getAngle());
         switch(phase) {
 
             case DETECTED:
-
-
-                if (controller.getView().get(currentCoordinate) instanceof GrassTrap) {
+                if (controller.getView().get(currentCoordinate) instanceof GrassTrap)
                     setPhase(Phase.IN_GRASS);
-                }
                 break;
 
             case IN_GRASS:
-                if (controller.getVelocity() < 3) {
+
+                Coordinate ahead = null;
+
+                if (controller.getVelocity() < 3)
                     controller.applyForwardAcceleration();
-                }
 
-                Coordinate ahead;
-                if (controller.getOrientation() == Direction.NORTH) {
+                if (controller.getOrientation() == Direction.NORTH)
                     ahead = new Coordinate(currentCoordinate.x, currentCoordinate.y +1);
-
-                } else if (controller.getOrientation() == Direction.EAST) {
+                else if (controller.getOrientation() == Direction.EAST)
                     ahead = new Coordinate(currentCoordinate.x +1, currentCoordinate.y );
-
-
-                } else if (controller.getOrientation() == Direction.SOUTH) {
+                else if (controller.getOrientation() == Direction.SOUTH)
                     ahead = new Coordinate(currentCoordinate.x , currentCoordinate.y -1);
-                } else {
+                else  //(controller.getOrientation() == Direction.WEST)
                     ahead = new Coordinate(currentCoordinate.x -1,  currentCoordinate.y );
-                }
 
+                // Check if I can pass the grass
                 if (controller.getView().get(ahead).getName().equals("Wall")) {
+                    // No, have to re-orient before moving in
                     setPhase(Phase.REVERSE_GRASS);
                     break;
                 }
 
-
-                if (!(controller.getView().get(currentCoordinate) instanceof GrassTrap)) {
+                // I just passed the grass trap
+                if (!(controller.getView().get(currentCoordinate) instanceof GrassTrap))
                     setPhase(Phase.OUT_GRASS);
-                }
                 break;
+
             case REVERSE_GRASS:
                 // bad alignment of car in grass
-
                 beforeSnap = controller.getOrientation();
 
-                if (isAngleSimilar(controller.getAngle(), 0, SNAP_THRESHOLD )) {
+                // EAST oriented
+                if (isAngleSimilar(controller.getAngle(), 0, SNAP_THRESHOLD ))
                     snapTo = Direction.EAST;
-                } else if (isAngleSimilar(controller.getAngle(), 90, SNAP_THRESHOLD)) {
+                else if (isAngleSimilar(controller.getAngle(), 90, SNAP_THRESHOLD))
                     snapTo = Direction.NORTH;
-                } else if (isAngleSimilar(controller.getAngle(), 180, SNAP_THRESHOLD)) {
+                else if (isAngleSimilar(controller.getAngle(), 180, SNAP_THRESHOLD))
                     snapTo = Direction.WEST;
-                } else {
+                else
                     snapTo = Direction.SOUTH;
-                }
 
-                if (controller.getView().get(currentCoordinate) instanceof GrassTrap) {
+                // Moving out
+                if (controller.getView().get(currentCoordinate) instanceof GrassTrap)
                     controller.applyReverseAcceleration();
-                }
 
-                if (!(controller.getView().get(currentCoordinate) instanceof GrassTrap)) {
+                // Passed the trap
+                if (!(controller.getView().get(currentCoordinate) instanceof GrassTrap))
                     setPhase(Phase.REVERSE_OUT);
-                }
 
                 break;
 
             case REVERSE_OUT:
-
-                if (controller.getVelocity() < CAR_SPEED) {
+                // Slow down if needed
+                if (controller.getVelocity() < CAR_SPEED)
                     controller.applyForwardAcceleration();
-                }
 
-                if (controller.getOrientation() != snapTo) {
-
-                    if ((beforeSnap == Direction.WEST && snapTo == Direction.SOUTH) || (beforeSnap == Direction.SOUTH && snapTo == Direction.EAST) || (beforeSnap == Direction.EAST && snapTo == Direction.NORTH) || (beforeSnap == Direction.NORTH && snapTo == Direction.WEST))
-                        applyLeftTurn(controller.getOrientation(),delta);
+                // Snap to one orientation
+                if (controller.getOrientation() != snapTo)
+                    if ((beforeSnap == Direction.WEST && snapTo == Direction.SOUTH)
+                            || (beforeSnap == Direction.SOUTH && snapTo == Direction.EAST)
+                            || (beforeSnap == Direction.EAST && snapTo == Direction.NORTH)
+                            || (beforeSnap == Direction.NORTH && snapTo == Direction.WEST))
+                        applyLeftTurn(controller.getOrientation(), delta);
                     else
                         applyRightTurn(controller.getOrientation(), delta);
-                } else {
+                else
                     setPhase(Phase.IN_GRASS);
-                }
-
                 break;
 
             case OUT_GRASS:
-                System.out.println("Current coordinate is: "+ currentCoordinate);
-                if (!(controller.getView().get(currentCoordinate) instanceof LavaTrap) && !(controller.getView().get(currentCoordinate) instanceof MudTrap)) {
+                logger.info("Current coordinate is {}", currentCoordinate);
+                // Not in any trap
+                if (!(controller.getView().get(currentCoordinate) instanceof TrapTile))
                     setPhase(Phase.FINDING_WALL);
-                }
-                else {
+                else
                     setPhase(Phase.COMPLETED);
-                }
                 break;
 
             case FINDING_WALL:
-
-             // if after leaving grass, the car is not following a wall, then try:
-             // turn left, go straight until find another wall, then turn right, continue following
-
+                /*
+                 * Finding next wall
+                 * if after leaving grass, the car is not following a wall, then try:
+                 * turn left, go straight until find another wall, then turn right, continue following
+                 */
                 Coordinate left_1, left_2, ahead_1, ahead_2;
                 Map<Coordinate, MapTile> carView = controller.getView();
+
                 if (controller.getOrientation() == Direction.NORTH) {
                     left_1 = new Coordinate(currentCoordinate.x -1, currentCoordinate.y);
                     left_2 = new Coordinate(currentCoordinate.x -2, currentCoordinate.y);
@@ -234,8 +271,6 @@ public class GrassAction extends Action {
                     }
                 }
 
-
-
                 if (controller.getVelocity() < CAR_SPEED) {
                     controller.applyForwardAcceleration();
                 }
@@ -246,23 +281,20 @@ public class GrassAction extends Action {
                     }
                 }
 
-
                 if (controller.getOrientation() != facingLeftDirection) {
                     applyLeftTurn(controller.getOrientation(), delta);
                 }
-
-
-
-
             break;
-
-
         }
     }
 
+
+    /**
+     * Tell the handler that the action taken is completed.
+     * @return
+     */
     @Override
     public boolean isCompleted() {
-
         return phase == Phase.COMPLETED;
     }
 }

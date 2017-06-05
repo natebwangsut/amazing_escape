@@ -6,9 +6,9 @@ package mycontroller.actions;
  * Project Part C - amazing-escape
  *
  * Group 107:
- * Nate Wangsutthitham [755399]
- * Kolatat Thangkasemvathana [780631]
- * Khai Mei Chin [755332]
+ * Nate Wangsutthitham          [755399]
+ * Kolatat Thangkasemvathana    [780631]
+ * Khai Mei Chin                [755332]
  *
  * Standard interface for Action.
  * This enables further implementation upon different systems.

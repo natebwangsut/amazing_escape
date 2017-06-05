@@ -13,9 +13,9 @@ import world.WorldSpatial;
  * Project Part C - amazing-escape
  *
  * Group 107:
- * Nate Wangsutthitham [755399]
- * Kolatat Thangkasemvathana [780631]
- * Khai Mei Chin [755332]
+ * Nate Wangsutthitham          [755399]
+ * Kolatat Thangkasemvathana    [780631]
+ * Khai Mei Chin                [755332]
  *
  * Action:
  * EVController is pivot and driven on Action.

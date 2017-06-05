@@ -25,9 +25,9 @@ import java.util.Scanner;
  * Project Part C - amazing-escape
  *
  * Group 107:
- * Nate Wangsutthitham [755399]
- * Kolatat Thangkasemvathana [780631]
- * Khai Mei Chin [755332]
+ * Nate Wangsutthitham          [755399]
+ * Kolatat Thangkasemvathana    [780631]
+ * Khai Mei Chin                [755332]
  *
  * Main controller of the car
  * EVController - Electric Vehicle Controller.
