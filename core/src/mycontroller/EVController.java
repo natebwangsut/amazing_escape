@@ -3,9 +3,11 @@ package mycontroller;
 import controller.CarController;
 import mycontroller.actions.Action;
 import mycontroller.actions.FollowAction;
+import mycontroller.actions.ReverseOutAction;
 import mycontroller.handler.DeadEndHandler;
 import mycontroller.handler.DiscreteTrapStrategy;
 import tiles.GrassTrap;
+import tiles.LavaTrap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -93,11 +95,11 @@ public class EVController extends CarController {
             FOVUtils.DeadEnd de;
             if ((de=utils.deadEndAhead(pv))!=null) {
                 toDo = state = deh.getAction(getView(),de);
-                /*Coordinate c = getCoordinate();
-                /*if(pv.get(c).tile instanceof LavaTrap && pv.get(c).logicalWall){
+                Coordinate c = getCoordinate();
+                if(pv.get(c).tile instanceof LavaTrap && pv.get(c).logicalWall){
                     toDo = state = new ReverseOutAction(this, getView(), null);
-                }*/
-            } else/* if (getView().get(getCoordinate()) instanceof MudTrap) {
+                }
+            } else /*if (getView().get(getCoordinate()) instanceof MudTrap) {
                 toDo = state = th.getAction(getView(), "MudTrap");
 
             } else */if (getView().get(getCoordinate()) instanceof GrassTrap){
