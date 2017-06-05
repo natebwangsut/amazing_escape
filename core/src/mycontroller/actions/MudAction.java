@@ -14,27 +14,27 @@ public class MudAction extends Action {
 
     protected final Map<Coordinate, MapTile> view;
     Coordinate currentCoordinate;
-    
+
     private enum Phase {
         DETECTED, IN_MUD, OUT_MUD, COMPLETED
     }
 
     private Phase phase = Phase.DETECTED;
-    
+
 
     public MudAction(CarController con, Map<Coordinate, MapTile> view) {
         super(con);
         this.view = view;
-        
+
 
         logger.info("New Mud Action");
     }
-    
+
     private void setPhase(Phase p) {
         phase = p;
         logger.info("Switching phase into {}", p.name());
     }
-    
+
     @Override
     public void update(float delta) {
      // current car coordinate
@@ -45,39 +45,39 @@ public class MudAction extends Action {
         int y = scanner.nextInt();
         currentCoordinate = new Coordinate(x,y);
     //    System.out.println("In?: " + currentCoordinate);
-        switch(phase){
-        
+        switch(phase) {
+
             case DETECTED:
 
-                if(controller.getVelocity() < 3){
+                if (controller.getVelocity() < 3) {
                     controller.applyForwardAcceleration();
                 }
-                
-             
-                
-                if(controller.getView().get(currentCoordinate) instanceof MudTrap){
+
+
+
+                if (controller.getView().get(currentCoordinate) instanceof MudTrap) {
                     setPhase(Phase.IN_MUD);
                 }
                 break;
-                
+
             case IN_MUD:
-                if(!(controller.getView().get(currentCoordinate) instanceof MudTrap)){
+                if (!(controller.getView().get(currentCoordinate) instanceof MudTrap)) {
                     setPhase(Phase.OUT_MUD);
                 }
                 break;
-                
+
             case OUT_MUD:
-                
-                if(controller.getVelocity() < 3){
+
+                if (controller.getVelocity() < 3) {
                     controller.applyForwardAcceleration();
                 } else {
                     setPhase(Phase.COMPLETED);
                 }
                 break;
-                
+
             default:
                 break;
-            
+
         }
     }
 

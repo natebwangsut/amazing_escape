@@ -22,12 +22,12 @@ public class FindWallAction extends Action {
     }
 
     private Phase phase = Phase.FINDING;
-    
+
     private void setPhase(Phase p) {
         phase = p;
         logger.info("Switching phase into {}", p.name());
     }
-    
+
     @Override
     public boolean isCompleted() {
         return phase == Phase.COMPLETED;
@@ -36,8 +36,8 @@ public class FindWallAction extends Action {
     @Override
     public void update(float delta) {
         super.update(delta);
-        switch(phase){
-        
+        switch(phase) {
+
         case FINDING:
             if (controller.getVelocity() < CAR_SPEED) {
                 controller.applyForwardAcceleration();
@@ -58,8 +58,8 @@ public class FindWallAction extends Action {
                 }
             }
             break;
-            
+
         }
-    
+
     }
 }

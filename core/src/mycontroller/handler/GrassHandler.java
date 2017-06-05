@@ -15,12 +15,12 @@ import controller.CarController;
 public class GrassHandler extends TrapHandler {
 
     private CarController controller;
-    
-    public GrassHandler(CarController controller){
+
+    public GrassHandler(CarController controller) {
         this.controller = controller;
     }
-    
-    
+
+
     @Override
     public Action getAction(Map<Coordinate, MapTile> view) {
         return new GrassAction(controller, view);

@@ -79,8 +79,8 @@ public class EVController extends CarController {
                 toDo = state = deh.getAction(getView(),de);
             } else if (getView().get(getCoordinate()) instanceof MudTrap) {
                 toDo = state = th.getAction(getView(), "MudTrap");
-                
-            } else if (getView().get(getCoordinate()) instanceof GrassTrap){
+
+            } else if (getView().get(getCoordinate()) instanceof GrassTrap) {
                 toDo = state = th.getAction(getView(), "GrassTrap");
             } else  {
                 toDo = backgroundState;
@@ -95,15 +95,14 @@ public class EVController extends CarController {
         if (toDo != null)
             toDo.update(delta);
     }
-    
-    public Coordinate getCoordinate(){
+
+    public Coordinate getCoordinate() {
         String coordinates = getPosition();
         Scanner scanner = new Scanner(coordinates);
         scanner.useDelimiter(",");
         int x = scanner.nextInt();
         int y = scanner.nextInt();
-        Coordinate coord = new Coordinate(x,y);
-        return coord;
+        return new Coordinate(x,y);
     }
-    
+
 }
