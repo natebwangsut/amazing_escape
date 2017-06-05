@@ -8,23 +8,40 @@ import org.apache.logging.log4j.Logger;
 import world.WorldSpatial;
 
 /**
- * Created by Kolatat on 23/5/17.
+ * [SWEN30006] Software Modelling and Design
+ * Semester 1, 2017
+ * Project Part C - amazing-escape
+ *
+ * Group 107:
+ * Nate Wangsutthitham [755399]
+ * Kolatat Thangkasemvathana [780631]
+ * Khai Mei Chin [755332]
+ *
+ * Action:
+ * EVController is pivot and driven on Action.
  */
 public abstract class Action implements IAction {
 
     protected Logger logger = LogManager.getLogger();
 
     // Car Speed to move at
-    public static final float CAR_SPEED = 3;
+    static final float CAR_SPEED = 3;
     // Offset used to differentiate between 0 and 360 degrees
     private static final int EAST_THRESHOLD = 3;
+
     protected final CarController controller;
     final FOVUtils utils;
     WorldSpatial.RelativeDirection lastTurnDirection = null;
     boolean turningLeft = false;
     boolean turningRight = false;
-    WorldSpatial.Direction previousState = null;
-    
+    private WorldSpatial.Direction previousState = null;
+
+
+    /**
+     * Constructor
+     *
+     * @param controller
+     */
     protected Action(CarController controller) {
         this.controller = controller;
         if (controller instanceof EVController) {
@@ -34,13 +51,19 @@ public abstract class Action implements IAction {
         }
     }
 
+    /**
+     * Update the car's movement
+     *
+     * @param delta
+     */
     public void update(float delta) {
         checkStateChange();
     }
 
+
     /**
-     * Checks whether the car's state has changed or not, stops turning if it
-     * already has.
+     * Check if the state has been changed -> do next action
+     *
      */
     private void checkStateChange() {
         if (previousState == null) {
@@ -58,8 +81,10 @@ public abstract class Action implements IAction {
         }
     }
 
+
     /**
      * Turn the car counter clock wise (think of a compass going counter clock-wise)
+     *
      */
     protected void applyLeftTurn(WorldSpatial.Direction orientation, float delta) {
         switch (orientation) {
@@ -92,6 +117,7 @@ public abstract class Action implements IAction {
 
     /**
      * Turn the car clock wise (think of a compass going clock-wise)
+     *
      */
     protected void applyRightTurn(WorldSpatial.Direction orientation, float delta) {
         switch (orientation) {
@@ -142,6 +168,7 @@ public abstract class Action implements IAction {
     /**
      * Try to orient myself to a degree that I was supposed to be at if I am
      * misaligned.
+     *
      */
     private void adjustLeft(WorldSpatial.Direction orientation, float delta) {
 
@@ -173,6 +200,13 @@ public abstract class Action implements IAction {
 
     }
 
+
+    /**
+     * Adjusting myself to the right wall
+     *
+     * @param orientation       which direction am I moving
+     * @param delta             delta from last update
+     */
     private void adjustRight(WorldSpatial.Direction orientation, float delta) {
         switch (orientation) {
             case EAST:

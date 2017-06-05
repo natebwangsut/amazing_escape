@@ -23,18 +23,38 @@ public class EfficientUTurnAction extends DeadEndAction {
     }
 
     private Phase phase = Phase.SETUP;
-    
-    private void setPhase(Phase p) {
-        phase = p;
-        logger.info("Switching phase into {}", p.name());
-    }
 
+
+    /**
+     * Constructor
+     *
+     * @param con
+     * @param view
+     * @param de
+     */
     public EfficientUTurnAction(CarController con, Map<Coordinate, MapTile> view, FOVUtils.DeadEnd de) {
         super(con,view,de);
         target = FOVUtils.directionalAdd(con.getOrientation(), WorldSpatial.RelativeDirection.LEFT);
         target = FOVUtils.directionalAdd(target, WorldSpatial.RelativeDirection.LEFT);
     }
 
+
+    /**
+     * Set the phase
+     *
+     * @param p     phase to be set into
+     */
+    private void setPhase(Phase p) {
+        phase = p;
+        logger.info("Switching phase into {}", p.name());
+    }
+
+
+    /**
+     * Update the car's movement
+     *
+     * @param delta
+     */
     @Override
     public void update(float delta) {
         super.update(delta);
@@ -62,6 +82,11 @@ public class EfficientUTurnAction extends DeadEndAction {
         }
     }
 
+
+    /**
+     * Tell the handler that the action taken is completed.
+     * @return
+     */
     @Override
     public boolean isCompleted() {
         return phase == Phase.COMPLETED;
