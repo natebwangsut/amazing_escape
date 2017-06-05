@@ -1,4 +1,4 @@
-# Project 2: amazing escape
+# Amazing Escape ![IMG](https://img.shields.io/travis/natebwangsut/amazing_escape.svg?style=flat-square "Travis Badge")
 
 SWEN30006: Part C
 
