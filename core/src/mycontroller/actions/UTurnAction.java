@@ -13,6 +13,7 @@ import java.util.Map;
  */
 public class UTurnAction extends DeadEndAction {
 
+    // Targeting direction after u-turn
     private WorldSpatial.Direction target;
 
     private enum Phase {
@@ -24,12 +25,35 @@ public class UTurnAction extends DeadEndAction {
 
     private Phase phase = Phase.BRAKING;
 
-    public UTurnAction(CarController con, Map<Coordinate, MapTile> view, FOVUtils.DeadEnd de) {
-        super(con,view,de);
-        target = FOVUtils.directionalAdd(con.getOrientation(), WorldSpatial.RelativeDirection.LEFT);
+    /**
+     *
+     * @param controller
+     * @param view
+     * @param de
+     */
+    public UTurnAction(CarController controller, Map<Coordinate, MapTile> view, FOVUtils.DeadEnd de) {
+        super(controller, view, de);
+        target = FOVUtils.directionalAdd(controller.getOrientation(), WorldSpatial.RelativeDirection.LEFT);
         target = FOVUtils.directionalAdd(target, WorldSpatial.RelativeDirection.LEFT);
     }
 
+
+    /**
+     * Set the phase
+     *
+     * @param p     phase to be set into
+     */
+    private void setPhase(Phase p) {
+        phase = p;
+        logger.info("Switching phase into {}", p.name());
+    }
+
+
+    /**
+     * Update the car's movement
+     *
+     * @param delta
+     */
     @Override
     public void update(float delta) {
         super.update(delta);
@@ -50,6 +74,11 @@ public class UTurnAction extends DeadEndAction {
         }
     }
 
+
+    /**
+     * Tell the handler that the action taken is completed.
+     * @return
+     */
     @Override
     public boolean isCompleted() {
         return phase==Phase.COMPLETED;

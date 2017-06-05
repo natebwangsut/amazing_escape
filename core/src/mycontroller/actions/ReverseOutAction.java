@@ -5,11 +5,25 @@ import java.util.Map;
 import java.util.Scanner;
 
 import controller.CarController;
+import mycontroller.EVController;
 import mycontroller.FOVUtils;
 import tiles.MapTile;
 import utilities.Coordinate;
 import world.WorldSpatial.Direction;
 
+/**
+ * [SWEN30006] Software Modelling and Design
+ * Semester 1, 2017
+ * Project Part C - amazing-escape
+ *
+ * Group 107:
+ * Nate Wangsutthitham          [755399]
+ * Kolatat Thangkasemvathana    [780631]
+ * Khai Mei Chin                [755332]
+ *
+ * Action to reverse out.
+ * Use this when the road is too small to do a uturn.
+ */
 public class ReverseOutAction extends DeadEndAction{
 
     private boolean completed;
@@ -37,11 +51,6 @@ public class ReverseOutAction extends DeadEndAction{
     }
 
     private Phase phase = Phase.MOVING;
-
-    private void setPhase(Phase p) {
-        phase = p;
-        logger.info("Switching phase into {}", p.name());
-    }
 
     /**
      * Constructor
@@ -75,6 +84,16 @@ public class ReverseOutAction extends DeadEndAction{
         }
     }
 
+    /**
+     * Set the phase
+     *
+     * @param p     phase to be set into
+     */
+    private void setPhase(Phase p) {
+        phase = p;
+        logger.info("Switching phase into {}", p.name());
+    }
+
 
     /**
      * Update the car's movement
@@ -85,7 +104,9 @@ public class ReverseOutAction extends DeadEndAction{
     public void update(float delta) {
 
         super.update(delta);
-
+        // current car coordinate
+        EVController ev = (EVController) controller;
+        currentCoordinate = ev.getCoordinate();
 
         switch(phase) {
             case MOVING:
@@ -94,18 +115,11 @@ public class ReverseOutAction extends DeadEndAction{
                 else
                     setPhase(Phase.REVERSING);
                 break;
+
             case REVERSING:
                 if (controller.getVelocity() < REVERSE_SPEED) {
                     controller.applyReverseAcceleration();
                 }
-
-                // current car coordinate
-                String coordinates = controller.getPosition();
-                Scanner scanner = new Scanner(coordinates);
-                scanner.useDelimiter(",");
-                int x = scanner.nextInt();
-                int y = scanner.nextInt();
-                currentCoordinate = new Coordinate(x,y);
 
                 // trying to figure out the shape of maze
                 if (!leftBackSeen && !rightBackSeen) {
@@ -116,42 +130,42 @@ public class ReverseOutAction extends DeadEndAction{
                     // check for leftBackSeen and rightBackSeen
                     // (based on orientations)
                     if (carDirection == Direction.NORTH) {
+                        leftBackTile = currentView.get(
+                                new Coordinate(currentCoordinate.x-1, currentCoordinate.y-1));
+                        rightBackTile = currentView.get(
+                                new Coordinate(currentCoordinate.x+1, currentCoordinate.y-1));
 
-                        leftBackTile = currentView.get(new Coordinate(x-1, y-1));
-                        rightBackTile = currentView.get(new Coordinate(x+1, y-1));
-
-                        toReverseCoordinate = new Coordinate(x, y-1);
-
+                        toReverseCoordinate = new Coordinate(currentCoordinate.x, currentCoordinate.y-1);
                     }
                     else if (carDirection == Direction.EAST) {
+                        leftBackTile = currentView.get(
+                                new Coordinate(currentCoordinate.x-1, currentCoordinate.y+1));
+                        rightBackTile = currentView.get(
+                                new Coordinate(currentCoordinate.x-1, currentCoordinate.y-1));
 
-                        leftBackTile = currentView.get(new Coordinate(x-1, y+1));
-                        rightBackTile = currentView.get(new Coordinate(x-1, y-1));
-
-                        toReverseCoordinate = new Coordinate(x-1,y);
-
+                        toReverseCoordinate = new Coordinate(currentCoordinate.x-1,currentCoordinate.y);
                     }
                     else if (carDirection == Direction.SOUTH) {
+                        leftBackTile = currentView.get(
+                                new Coordinate(currentCoordinate.x+1, currentCoordinate.y+1));
+                        rightBackTile = currentView.get(
+                                new Coordinate(currentCoordinate.x-1, currentCoordinate.y+1));
 
-                        leftBackTile = currentView.get(new Coordinate(x+1, y+1));
-                        rightBackTile = currentView.get(new Coordinate(x-1, y+1));
-
-                        toReverseCoordinate = new Coordinate(x, y+1);
-
+                        toReverseCoordinate = new Coordinate(currentCoordinate.x, currentCoordinate.y+1);
                     }
                     else { //carDirection == Direction.WEST
-                        leftBackTile = currentView.get(new Coordinate(x+1, y-1));
-                        rightBackTile = currentView.get(new Coordinate(x+1, y+1));
+                        leftBackTile = currentView.get(
+                                new Coordinate(currentCoordinate.x+1, currentCoordinate.y-1));
+                        rightBackTile = currentView.get(
+                                new Coordinate(currentCoordinate.x+1, currentCoordinate.y+1));
 
-                        toReverseCoordinate = new Coordinate(x+1, y);
+                        toReverseCoordinate = new Coordinate(currentCoordinate.x+1, currentCoordinate.y);
                     }
 
-                    if (leftBackTile.getName().equals("Road")) {
+                    if (leftBackTile.getName().equals("Road"))
                         leftBackSeen = true;
-                    }
-                    if (rightBackTile.getName().equals("Road")) {
+                    if (rightBackTile.getName().equals("Road"))
                         rightBackSeen = true;
-                    }
                 }
                 else {
                     // TODO something
@@ -166,7 +180,6 @@ public class ReverseOutAction extends DeadEndAction{
                 break;
 
             case TURNING:
-
                 if (controller.getOrientation() == intoDirection)
                     setPhase(Phase.COMPLETED);
 
@@ -175,6 +188,7 @@ public class ReverseOutAction extends DeadEndAction{
                 break;
             }
     }
+
 
     /**
      * Tell the handler that the action taken is completed.
@@ -185,7 +199,3 @@ public class ReverseOutAction extends DeadEndAction{
         return false;
     }
 }
-
-
-
-
