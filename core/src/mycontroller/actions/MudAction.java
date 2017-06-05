@@ -71,8 +71,8 @@ public class MudAction extends Action {
         currentCoordinate = ev.getCoordinate();
 
         //System.out.println("In?: " + currentCoordinate);
-        logger.info("Current orientation is: {}", controller.getOrientation());
-        logger.info("Current angle is: {}", controller.getAngle());
+       // logger.info("Current orientation is: {}", controller.getOrientation());
+      //  logger.info("Current angle is: {}", controller.getAngle());
         switch(phase) {
 
             case DETECTED:

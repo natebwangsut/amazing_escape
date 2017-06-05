@@ -4,6 +4,7 @@ import controller.CarController;
 import mycontroller.EVController;
 import tiles.GrassTrap;
 import tiles.MapTile;
+import tiles.MudTrap;
 import tiles.TrapTile;
 import utilities.Coordinate;
 import world.WorldSpatial.Direction;
@@ -23,6 +24,7 @@ import java.util.function.Predicate;
  *
  * Action to find and stick to the wall.
  */
+
 public class GrassAction extends Action {
 
     protected final Map<Coordinate, MapTile> view;
@@ -130,8 +132,18 @@ public class GrassAction extends Action {
         currentCoordinate = ev.getCoordinate();
 
         //System.out.println("In?: " + currentCoordinate);
-        logger.info("Current orientation is: {}", controller.getOrientation());
-        logger.info("Current angle is: {}", controller.getAngle());
+      //  logger.info("Current orientation is: {}", controller.getOrientation());
+      // log
+        
+        
+        // If a Mud trap is spotted ahead, increase acceleration as much as possible
+        if(utils.checkTileAhead(t->t instanceof MudTrap)){
+            if(controller.getVelocity() < 5f){
+                controller.applyForwardAcceleration();
+            }
+        }
+        
+        
         switch(phase) {
 
             case DETECTED:
@@ -192,7 +204,7 @@ public class GrassAction extends Action {
                 break;
 
             case REVERSE_OUT:
-                // Slow down if needed
+                // Increase the speed if too slow
                 if (controller.getVelocity() < CAR_SPEED)
                     controller.applyForwardAcceleration();
 

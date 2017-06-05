@@ -21,8 +21,9 @@ import world.WorldSpatial.Direction;
  * Khai Mei Chin                [755332]
  *
  * Action to reverse out.
- * Use this when the road is too small to do a uturn.
+ * Use this when the road is too small to do a uturn or 3point-turn.
  */
+
 public class ReverseOutAction extends DeadEndAction{
 
     private boolean completed;

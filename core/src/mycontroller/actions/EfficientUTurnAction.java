@@ -18,7 +18,7 @@ import java.util.Map;
  * Kolatat Thangkasemvathana    [780631]
  * Khai Mei Chin                [755332]
  *
- * UTuning with efficiency Action.
+ * UTurning with efficiency Action.
  */
 public class EfficientUTurnAction extends DeadEndAction {
 

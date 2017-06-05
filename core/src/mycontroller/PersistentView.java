@@ -24,6 +24,7 @@ import java.util.Map;
  *
  * Handling the car's view
  */
+
 public class PersistentView {
 
     private static Logger logger = LogManager.getLogger();
@@ -172,7 +173,8 @@ public class PersistentView {
             p.tile = e.getValue();
             p.coordinate = e.getKey();
             // condition for our tile to be considered a logical wall
-            // if LavaTrap and MudTrap tiles are added as 'logical walls', the car may get stuck; not have any path to go through
+            // if LavaTrap and MudTrap tiles are added as 'logical walls', the car may get stuck; 
+            // thus not have any path to go through
             p.logicalWall = FOVUtils.IS_WALL.test(e.getValue());// || e.getValue() instanceof LavaTrap || e.getValue() instanceof MudTrap;
 
             masterView.put(e.getKey(), p);
@@ -268,7 +270,7 @@ public class PersistentView {
     }
 
     /**
-     * Can the deadend be fill ?
+     * Can the deadend be filled ?
      *
      * @param cen
      * @param limit

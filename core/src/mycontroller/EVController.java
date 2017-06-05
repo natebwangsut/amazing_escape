@@ -3,6 +3,7 @@ package mycontroller;
 import controller.CarController;
 import mycontroller.actions.Action;
 import mycontroller.actions.FollowAction;
+import mycontroller.actions.ReverseOutAction;
 import mycontroller.handler.DeadEndHandler;
 import mycontroller.handler.DiscreteTrapStrategy;
 import mycontroller.handler.IHandler;
@@ -78,7 +79,7 @@ public class EVController extends CarController {
      */
     @Override
     public void update(float delta) {
-        //  System.out.println("Current speed is: " + getVelocity());
+         // System.out.println("Current speed is: " + getVelocity());
 
         pv.update(getView());
 
@@ -97,14 +98,14 @@ public class EVController extends CarController {
             FOVUtils.DeadEnd de;
             if ((de=utils.deadEndAhead(pv))!=null) {
                 toDo = state = deh.getAction(getView(),de);
-                /*Coordinate c = new Coordinate(getPosition());
-                if(pv.get(c).tile instanceof LavaTrap && pv.get(c).logicalWall){
+                /*Coordinate c = getCoordinate();
+                /*if(pv.get(c).tile instanceof LavaTrap && pv.get(c).logicalWall){
                     toDo = state = new ReverseOutAction(this, getView(), null);
                 }*/
-            } else if (getView().get(getCoordinate()) instanceof MudTrap) {
+            } else/* if (getView().get(getCoordinate()) instanceof MudTrap) {
                 toDo = state = th.getAction(getView(), "MudTrap");
 
-            } else if (getView().get(getCoordinate()) instanceof GrassTrap){
+            } else */if (getView().get(getCoordinate()) instanceof GrassTrap){
                 toDo = state = th.getAction(getView(), "GrassTrap");
             } else  {
                 toDo = backgroundState;

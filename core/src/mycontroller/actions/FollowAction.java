@@ -1,6 +1,7 @@
 package mycontroller.actions;
 
 import controller.CarController;
+import tiles.MudTrap;
 import utilities.Coordinate;
 import world.WorldSpatial;
 
@@ -16,7 +17,7 @@ import java.util.function.Predicate;
  * Kolatat Thangkasemvathana    [780631]
  * Khai Mei Chin                [755332]
  *
- * Action to Stuck to the wall.
+ * Action to Stick to the wall.
  */
 public class FollowAction extends Action {
 
@@ -44,6 +45,15 @@ public class FollowAction extends Action {
     @Override
     public void update(float delta) {
         super.update(delta);
+        
+
+        // If a Mud trap is spotted ahead, increase acceleration as much as possible
+        if(utils.checkTileAhead(t->t instanceof MudTrap)){
+            if(controller.getVelocity() < 5f){
+                controller.applyForwardAcceleration();
+            }
+        }
+        
 
         // If you are not following a wall initially, find a wall to stick to!
         if (!following) {

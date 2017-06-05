@@ -23,6 +23,7 @@ import java.util.Map;
  *
  * Handle deadends
  */
+
 public class DeadEndHandler implements IHandler {
 
     private CarController controller;
@@ -71,8 +72,8 @@ public class DeadEndHandler implements IHandler {
             // this should probably never happen
             return new ReverseOutAction(controller, view, deadEnd);
         } else {
-            // fuck you
-            // holy sheeeeeeeeeeeet
+
+            // nothing to see here ...
         }
         return new ThreePointTurnAction(controller, view, deadEnd);
     }

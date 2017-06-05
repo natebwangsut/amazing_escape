@@ -18,7 +18,7 @@ import java.util.Map;
  * Khai Mei Chin                    [755332]
  *
  * DeadEnd based Action:
- * Action to dealt with deadends if I have detected one.
+ * Action to deal with deadends if I have detected one.
  */
 public abstract class DeadEndAction extends Action {
 

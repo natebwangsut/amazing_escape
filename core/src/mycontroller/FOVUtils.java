@@ -217,8 +217,8 @@ public class FOVUtils {
 
     public boolean isInVicinity(Predicate<MapTile> wantTile) {
         Map<Coordinate, MapTile> view = con.getView();
-        for (int i = 0; i <= 1; i++) {
-            for (int j = 0; j <= 1; j++) {
+        for (int i = 0; i <= wallSensitivity; i++) {
+            for (int j = 0; j <= wallSensitivity; j++) {
                 Coordinate nc = relativeAdd(i, j, con.getOrientation());
                 if (wantTile.test(view.get(nc))) {
                     logger.info("Found TrapTile at {}", nc);
@@ -226,6 +226,20 @@ public class FOVUtils {
                     return true;
                 }
             }
+        }
+        return false;
+    }
+    
+    public boolean checkTileAhead(Predicate<MapTile> wantTile){
+        Map<Coordinate, MapTile> view = con.getView();
+        for (int i = 0; i <= wallSensitivity; i++) {
+            Coordinate nc = relativeAdd(i, 0, con.getOrientation());
+            if (wantTile.test(view.get(nc))) {
+                logger.info("Found wanted Tile");
+
+                return true;
+            }
+            
         }
         return false;
     }
