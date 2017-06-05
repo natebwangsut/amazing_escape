@@ -10,6 +10,20 @@ import tiles.MapTile;
 import utilities.Coordinate;
 import world.WorldSpatial.Direction;
 
+/**
+ * [SWEN30006] Software Modelling and Design
+ * Semester 1, 2017
+ * Project Part C - amazing-escape
+ *
+ * Group 107:
+ * Nate Wangsutthitham [755399]
+ * Kolatat Thangkasemvathana [780631]
+ * Khai Mei Chin [755332]
+ *
+ * ReverseOut Action
+ * Series of movements to execute the reverse Action
+ */
+
 public class ReverseOutAction extends DeadEndAction{
 
     private boolean completed;

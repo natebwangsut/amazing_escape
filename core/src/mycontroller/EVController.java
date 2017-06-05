@@ -35,6 +35,7 @@ import java.util.Scanner;
  *
  * The controller use Action based movement where Action is a representation of a set of movements.
  */
+
 public class EVController extends CarController {
 
     private static Logger logger = LogManager.getLogger();

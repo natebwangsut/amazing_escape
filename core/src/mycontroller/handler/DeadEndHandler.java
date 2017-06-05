@@ -16,6 +16,20 @@ import utilities.Coordinate;
 
 import java.util.Map;
 
+/**
+ * [SWEN30006] Software Modelling and Design
+ * Semester 1, 2017
+ * Project Part C - amazing-escape
+ *
+ * Group 107:
+ * Nate Wangsutthitham [755399]
+ * Kolatat Thangkasemvathana [780631]
+ * Khai Mei Chin [755332]
+ *
+ * Determines the strategy to take when encountering a dead end of a particular size
+ * Enables future modifications to the strategy taken for dead ends
+ */
+
 public class DeadEndHandler implements IHandler {
 
     private CarController controller;
@@ -26,6 +40,7 @@ public class DeadEndHandler implements IHandler {
 
     public Action getAction(Map<Coordinate, MapTile> view) {
         // When handling deadends, only view is not enough
+        // Method overloading, the variant of getAction() below
         return null;
     }
 

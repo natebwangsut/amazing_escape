@@ -8,8 +8,20 @@ import world.WorldSpatial;
 import java.util.function.Predicate;
 
 /**
- * Created by Kolatat on 23/5/17.
+ * [SWEN30006] Software Modelling and Design
+ * Semester 1, 2017
+ * Project Part C - amazing-escape
+ *
+ * Group 107:
+ * Nate Wangsutthitham [755399]
+ * Kolatat Thangkasemvathana [780631]
+ * Khai Mei Chin [755332]
+ *
+ * Wall-follower action:
+ * The basic action to take, when no dead ends or traps are encountered.
+ * Used to traverse the maze until the exit is found.
  */
+
 public class FollowAction extends Action {
 
     protected final Predicate<Coordinate> tileTest;

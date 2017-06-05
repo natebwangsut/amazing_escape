@@ -25,6 +25,7 @@ import java.util.function.Predicate;
  *
  * Handling the car's FOV
  */
+
 public class FOVUtils {
 
     private static Logger logger = LogManager.getLogger();

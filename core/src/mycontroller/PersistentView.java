@@ -24,6 +24,7 @@ import java.util.Map;
  *
  * Handling the car's view
  */
+
 public class PersistentView {
 
     private static Logger logger = LogManager.getLogger();

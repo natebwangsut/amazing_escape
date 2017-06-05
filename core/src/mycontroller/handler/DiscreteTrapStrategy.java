@@ -10,14 +10,32 @@ import utilities.Coordinate;
 import java.util.Map;
 
 /**
- * Created by Kolatat on 23/5/17.
+ * [SWEN30006] Software Modelling and Design
+ * Semester 1, 2017
+ * Project Part C - amazing-escape
+ *
+ * Group 107:
+ * Nate Wangsutthitham [755399]
+ * Kolatat Thangkasemvathana [780631]
+ * Khai Mei Chin [755332]
+ *
+ * Determines the strategy to take when encountering a particular type of trap
+ * Enables future modifications to the strategy taken for the traps
  */
+
 public class DiscreteTrapStrategy implements IHandler {
 
     CarController con;
 
     public DiscreteTrapStrategy(CarController con) {
         this.con = con;
+    }
+    
+    @Override
+    public Action getAction(Map<Coordinate, MapTile> view) {
+        // Method overloading
+        // Variant of getAction() below
+        return null;
     }
 
     public Action getAction(Map<Coordinate, MapTile> view, String type) {
@@ -46,9 +64,5 @@ public class DiscreteTrapStrategy implements IHandler {
         return null;
     }
 
-    @Override
-    public Action getAction(Map<Coordinate, MapTile> view) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    
 }

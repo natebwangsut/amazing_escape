@@ -13,6 +13,7 @@ package mycontroller.actions;
  * Standard interface for Action.
  * This enables further implementation upon different systems.
  */
+
 public interface IAction {
 
     /**

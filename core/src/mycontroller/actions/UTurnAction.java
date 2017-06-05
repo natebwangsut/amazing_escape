@@ -9,8 +9,19 @@ import world.WorldSpatial;
 import java.util.Map;
 
 /**
- * Created by Kolatat on 2/6/17.
+ * [SWEN30006] Software Modelling and Design
+ * Semester 1, 2017
+ * Project Part C - amazing-escape
+ *
+ * Group 107:
+ * Nate Wangsutthitham [755399]
+ * Kolatat Thangkasemvathana [780631]
+ * Khai Mei Chin [755332]
+ *
+ * U-turn Action
+ * Series of movements to execute a U-turn Action
  */
+
 public class UTurnAction extends DeadEndAction {
 
     private WorldSpatial.Direction target;

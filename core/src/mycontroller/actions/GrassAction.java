@@ -15,6 +15,20 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
+/**
+ * [SWEN30006] Software Modelling and Design
+ * Semester 1, 2017
+ * Project Part C - amazing-escape
+ *
+ * Group 107:
+ * Nate Wangsutthitham [755399]
+ * Kolatat Thangkasemvathana [780631]
+ * Khai Mei Chin [755332]
+ *
+ * Grass-Trap Action:
+ * Series of movements to execute when the car is in a Grass Trap
+ */
+
 public class GrassAction extends Action {
 
     protected final Map<Coordinate, MapTile> view;

@@ -20,35 +20,33 @@ import java.util.Scanner;
  * Kolatat Thangkasemvathana [780631]
  * Khai Mei Chin [755332]
  *
- * Grass-Trap Action:
- * Series of movements to execute when the car is in a Mud Trap
+ * Lava-Trap Action:
+ * Series of movements to execute when the car is near or in the Lava Trap
  */
 
-public class MudAction extends Action {
+public class LavaAction extends Action {
 
-    protected final Map<Coordinate, MapTile> view;
     Coordinate currentCoordinate;
-
+    
     private enum Phase {
         DETECTED, IN_MUD, OUT_MUD, COMPLETED
     }
 
     private Phase phase = Phase.DETECTED;
+    
 
-
-    public MudAction(CarController con, Map<Coordinate, MapTile> view) {
+    public LavaAction(CarController con) {
         super(con);
-        this.view = view;
-
+        
 
         logger.info("New Mud Action");
     }
-
+    
     private void setPhase(Phase p) {
         phase = p;
         logger.info("Switching phase into {}", p.name());
     }
-
+    
     @Override
     public void update(float delta) {
      // current car coordinate
@@ -59,39 +57,30 @@ public class MudAction extends Action {
         int y = scanner.nextInt();
         currentCoordinate = new Coordinate(x,y);
     //    System.out.println("In?: " + currentCoordinate);
-        switch(phase) {
 
+        System.out.println("Current speed is: " + controller.getVelocity());
+        switch(phase){
             case DETECTED:
 
-                if (controller.getVelocity() < 3) {
+                // if Mud detected a few while still a few tiles away, increase acceleration as much as possible
+                if(controller.getVelocity() < 5f){
                     controller.applyForwardAcceleration();
                 }
-
-
-
-                if (controller.getView().get(currentCoordinate) instanceof MudTrap) {
+                
+                if(controller.getView().get(currentCoordinate) instanceof MudTrap){
                     setPhase(Phase.IN_MUD);
                 }
                 break;
-
+                
             case IN_MUD:
-                if (!(controller.getView().get(currentCoordinate) instanceof MudTrap)) {
-                    setPhase(Phase.OUT_MUD);
-                }
-                break;
-
-            case OUT_MUD:
-
-                if (controller.getVelocity() < 3) {
-                    controller.applyForwardAcceleration();
-                } else {
+                if(!(controller.getView().get(currentCoordinate) instanceof MudTrap)){
                     setPhase(Phase.COMPLETED);
                 }
                 break;
-
+             
             default:
                 break;
-
+            
         }
     }
 
