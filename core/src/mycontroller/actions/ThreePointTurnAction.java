@@ -23,7 +23,6 @@ import java.util.Map;
  *
  * Advanced technique for driver.
  */
-
 public class ThreePointTurnAction extends DeadEndAction {
 
     private WorldSpatial.Direction incomingDir;
@@ -184,7 +183,7 @@ public class ThreePointTurnAction extends DeadEndAction {
             case POINT2_B:
                 controller.applyForwardAcceleration();
                 if (controller.getVelocity() > 0.1 && !isReversing())
-                    phase = Phase.POINT3_A;
+                    setPhase(Phase.POINT3_A);
                 break;
 
             case POINT3_A:
@@ -198,7 +197,7 @@ public class ThreePointTurnAction extends DeadEndAction {
 
                // logger.info("Current angle: {}", controller.getAngle());
                 if (isAngleSimilar(controller.getAngle(), target3, T_THRESHOLD))
-                    phase = Phase.ACCELERATION;
+                    setPhase(Phase.ACCELERATION);
                 break;
 
             case ACCELERATION:

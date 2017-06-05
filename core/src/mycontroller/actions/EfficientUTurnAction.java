@@ -88,6 +88,8 @@ public class EfficientUTurnAction extends DeadEndAction {
                 if (controller.getVelocity() >= CAR_SPEED)
                     setPhase(Phase.COMPLETED);
                 break;
+        default:
+            break;
         }
     }
 

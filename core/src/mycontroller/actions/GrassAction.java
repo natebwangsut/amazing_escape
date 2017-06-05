@@ -295,6 +295,8 @@ public class GrassAction extends Action {
                     applyLeftTurn(controller.getOrientation(), delta);
                 }
             break;
+        default:
+            break;
         }
     }
 

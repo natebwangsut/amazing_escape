@@ -3,14 +3,9 @@ package mycontroller;
 import controller.CarController;
 import mycontroller.actions.Action;
 import mycontroller.actions.FollowAction;
-import mycontroller.actions.ReverseOutAction;
 import mycontroller.handler.DeadEndHandler;
 import mycontroller.handler.DiscreteTrapStrategy;
-import mycontroller.handler.IHandler;
 import tiles.GrassTrap;
-import tiles.LavaTrap;
-import tiles.MudTrap;
-import tiles.TrapTile;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -133,6 +128,7 @@ public class EVController extends CarController {
         scanner.useDelimiter(",");
         int x = scanner.nextInt();
         int y = scanner.nextInt();
+        scanner.close();
         return new Coordinate(x,y);
     }
 }
