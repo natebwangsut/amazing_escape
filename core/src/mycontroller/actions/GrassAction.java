@@ -78,35 +78,6 @@ public class GrassAction extends Action {
         logger.info("New Grass Action");
     }
 
-
-    /**
-     * Check the angle between two values
-     * @param t1
-     * @param t2
-     * @param threshold
-     * @return
-     */
-    private static boolean isAngleSimilar(float t1, float t2, float threshold) {
-        float diff = normaliseAngle(t1 - t2);
-        if (diff > 180) diff = 360 - diff;
-        // now we have a range of 0..180 where 0 means t1 close to t2
-        return diff <= threshold;
-    }
-
-
-    /**
-     * Normallise angle to [0, 360) range
-     *
-     * @param theta
-     * @return
-     */
-    private static float normaliseAngle(float theta) {
-        while (theta < 0) theta += 360;
-        return theta % 360;
-    }
-
-
-
     /**
      * Set the phase
      *

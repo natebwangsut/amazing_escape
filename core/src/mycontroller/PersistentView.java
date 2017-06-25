@@ -110,6 +110,7 @@ public class PersistentView {
         dirs[1] = FOVUtils.directionalAdd(dirs[0], WorldSpatial.RelativeDirection.LEFT);
         dirs[2] = FOVUtils.directionalAdd(dirs[0], WorldSpatial.RelativeDirection.RIGHT);
         for(WorldSpatial.Direction dir : dirs) {
+            // for some reason car riperino when also checking left right
             if(dir!=con.getOrientation()) continue;
             int s = -1;
             int e = -1;
@@ -181,6 +182,7 @@ public class PersistentView {
         }
     }
 
+    @Deprecated
     private boolean dtdl(Coordinate start, Class<? extends TrapTile> type, int x, int y){
         Coordinate rs = new Coordinate(start.x-x, start.y-y);
         if(get(rs) != null && get(rs).logicalWall) return false;

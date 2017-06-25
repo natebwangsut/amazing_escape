@@ -25,16 +25,56 @@ public abstract class Action implements IAction {
     protected Logger logger = LogManager.getLogger();
 
     // Car Speed to move at
-    static final float CAR_SPEED = 3;
+    protected static final float CAR_SPEED = 3;
     // Offset used to differentiate between 0 and 360 degrees
     private static final int EAST_THRESHOLD = 3;
+    protected static final float ANGLE_THRESHOLD = 10;
 
     protected final CarController controller;
-    final FOVUtils utils;
+    protected final FOVUtils utils;
     WorldSpatial.RelativeDirection lastTurnDirection = null;
     boolean turningLeft = false;
     boolean turningRight = false;
     private WorldSpatial.Direction previousState = null;
+
+    /**
+     * Check the angle between two values
+     * @param t1
+     * @param t2
+     * @param threshold
+     * @return
+     */
+    protected static boolean isAngleSimilar(float t1, float t2, float threshold) {
+        float diff = normaliseAngle(t1 - t2);
+        if (diff > 180) diff = 360 - diff;
+        // now we have a range of 0..180 where 0 means t1 close to t2
+        return diff <= threshold;
+    }
+
+
+    /**
+     * Normalise angle to [0, 360) range
+     *
+     * @param theta
+     * @return
+     */
+    protected static float normaliseAngle(float theta) {
+        while (theta < 0) theta += 360;
+        return theta % 360;
+    }
+
+
+    /**
+     * Check if reversing or not
+     *
+     * @return
+     */
+    protected boolean isReversing() {
+        // reversing if velocity vector opposite angle
+        float car = controller.getAngle();
+        float vel = controller.getRawVelocity().angle();
+        return isAngleSimilar(car, vel + 180, ANGLE_THRESHOLD);
+    }
 
 
     /**
